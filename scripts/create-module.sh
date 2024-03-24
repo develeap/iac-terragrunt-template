@@ -28,8 +28,8 @@ TF
 
   # Create a main.tf file for this module
   cat <<TF >"$module_path/1-main.tf"
-module "$module_name" {
-
+resource "example" "example"{
+  
 }
 TF
 
@@ -42,12 +42,16 @@ TF
 
   # Create a locals.tf file for this module
   cat <<TF >"$module_path/3-locals.tf"  
-locals {}
+locals {
+
+}
 TF
 
   # Create a data_sources.tf file for this module
   cat <<TF >"$module_path/4-data_sources.tf"
-data "example" {}
+data "example" {
+
+}
 TF
 
   # Create a variables.tf file for this module

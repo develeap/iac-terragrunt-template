@@ -88,15 +88,17 @@ decrypt *FILE:
 #############
 # Terraform #
 #############
+set positional-arguments := true
 # Create a new Terraform module
-create-module *MODULE:
+create-module $MODULE:
   @echo "Creating a new Terraform module..."
-  bash ./scripts/create-module.sh $MODULE
+  @bash ./scripts/create-module.sh $MODULE 
 
 # Create documentation for a Terraform module
-create-docs *MODULE:
+create-docs $MODULE:
   @echo "Creating documentation for $MODULE..."
-  bash ./scripts/create-docs.sh $MODULE
+  @bash ./scripts/create-docs.sh $MODULE
+
 ##############
 # Terragrunt #
 ##############
