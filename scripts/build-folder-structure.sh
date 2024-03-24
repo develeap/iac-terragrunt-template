@@ -4,6 +4,7 @@ accounts=('82281136')
 regions=('us-east-1' 'us-west-1')
 environments=('prod' 'stage' 'dev')
 
+mkdir -p modules
 for account in "${accounts[@]}"; do 
   for region in "${regions[@]}"; do 
     for environment in "${environments[@]}"; do 
@@ -11,7 +12,7 @@ for account in "${accounts[@]}"; do
       for dir in "storage" "network" "secrets" "compute" "databases"; do mkdir -p "infrastructures/$account/$environment/${environment}-1/$region/$dir"; done
 
       # Create the infrastructure_commons.hcl file - this file will be used to store the common variables for all the accounts, regions, and environments
-      cat <<-HCL > "./infrastructures/infrastructure_commons.hcl"
+      cat <<-HCL > "infrastructures/infrastructure_commons.hcl"
 locals {}
 HCL
 
