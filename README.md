@@ -6,6 +6,10 @@ Repository to use as a template for future terragrunt (IaC tool) projects.
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
+- [Build the infrastructure folder structure](#build-the-infrastructure-folder-structure)
+  - [Example](#example)
+- 
+- [Inheritance](#inheritance)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -20,6 +24,9 @@ This repository is a template to be used for future terragrunt projects. It cont
 
 ## Getting Started
 To get started, you can use this repository as a template and clone it to your local machine. After that, you can start creating your own modules and terragrunt configurations.
+
+## Cheat Sheet
+Make sure to check the [Cheat Sheet](/CheatSheet.md) for some useful commands and tips.
 
 ## Usage
 Use the Justfile provided in this repository to run various commands. You can see the available commands by running `just --list`.
