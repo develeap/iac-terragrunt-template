@@ -73,7 +73,7 @@ infrastructures
 │   │       │   │   └── databases_commons.hcl
 │   │       │   ├── network
 │   │       │   │   └── network_commons.hcl
-│          │   ├── region_commons.hcl
+│   │       │   ├── region_commons.hcl
 │   │       │   ├── secrets
 │   │       │   │   └── secrets_commons.hcl
 │   │       │   └── storage
@@ -121,6 +121,9 @@ infrastructures
 
 44 directories, 41 files
 ```
+
+## Inheritance
+The folder structure is designed to inherit configurations from the parent folders. For example, the `compute_commons.hcl` file in the `dev-1` folder inherits configurations from the `compute_commons.hcl` file in the `dev` folder, which in turn inherits configurations from the `environment_commons.hcl` file in the `dev` folder, and so on.
 
 ## Contributing
 If you want to contribute to this repository, please create a pull request with your changes.
