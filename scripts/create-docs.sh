@@ -1,3 +1,12 @@
+###########################################################################################
+# Author: Lior Dux @zMynxx
+# Description: This script generates a README.md and EXAMPLE.md file for a Terraform module.
+# Usage: ./create-docs.sh <module_name>
+# Example: ./create-docs.sh my-module
+# Dependencies: terraform-docs
+# License: MIT
+# Version: 1.0
+###########################################################################################
 #!/bin/bash
 modules_dir="modules"
 module_name=$1

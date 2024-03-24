@@ -85,6 +85,18 @@ decrypt *FILE:
   @echo "Decrypting $FILE..."
   sops --decrypt --in-place $FILE
 
+#############
+# Terraform #
+#############
+# Create a new Terraform module
+create-module *MODULE:
+  @echo "Creating a new Terraform module..."
+  bash ./scripts/create-module.sh $MODULE
+
+# Create documentation for a Terraform module
+create-docs *MODULE:
+  @echo "Creating documentation for $MODULE..."
+  bash ./scripts/create-docs.sh $MODULE
 ##############
 # Terragrunt #
 ##############

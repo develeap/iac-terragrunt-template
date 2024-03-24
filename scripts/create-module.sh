@@ -1,3 +1,12 @@
+###########################################################################################
+# Author: Lior Dux @zMynxx
+# Description: This script generates a Terraform module structure with the required files. 
+# Usage: ./create-module.sh <module_name> 
+# Example: ./create-module.sh my-module
+# Dependencies: None
+# License: MIT
+# Version: 1.0
+###########################################################################################
 #!/bin/bash
 mkmodule() {
   if [ -z "$1" ]; then
