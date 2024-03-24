@@ -3,7 +3,7 @@
 ```hcl
 terraform {
 	source = "tfr:///aws-ia/eks-blueprints-addon/aws?version=1.1.0"
-	source = "[git:///aws-ia/eks-blueprints-addon/aws?version=1.1.0](git::git@github.com:acme/infrastructure-modules.git//networking/vpc?ref=v0.0.1)"
+	source = "git::git@github.com:acme/infrastructure-modules.git//networking/vpc?ref=v0.0.1"
 	source = "${get_path_to_repo_root()}//modules/iam"
 }
 ```
@@ -12,9 +12,7 @@ terraform {
 
 ```hcl
 terraform {
-	
-  source = "."
-
+	source = "."
 	# Before apply or plan, run "echo Foo".
 	before_hook "before_hook" {
 		commands = ["apply", "plan"]
@@ -25,7 +23,7 @@ terraform {
 			"   =========================================================================="
 	    ]
 	}
-
+	
 	# After apply or plan, run "echo Foo"
 	after_hook "after_hook" {
 		commands = ["apply", "plan"]
@@ -296,8 +294,7 @@ terraform_version_constraint = ">= 0.11"
 terragrunt_version_constraint = ">= 0.23"
 ```
 
-## Encryption using SOPS
-[Sops](https://github.com/getsops/sops)
+## Encryption using [SOPS](https://github.com/getsops/sops)
 
 1. Store your secrets in a file:
 ```json
