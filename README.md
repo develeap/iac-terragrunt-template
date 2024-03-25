@@ -7,8 +7,7 @@ Repository to use as a template for future terragrunt (IaC tool) projects.
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [Build the infrastructure folder structure](#build-the-infrastructure-folder-structure)
-  - [Example](#example)
-- 
+- [Example](#example)
 - [Inheritance](#inheritance)
 - [Contributing](#contributing)
 - [License](#license)
@@ -40,91 +39,91 @@ just build-folder-structure
 
 #### Example:
 ```bash
-infrastructures
+infrastructure-live
 ├── 82281136
-│   ├── account_commons.hcl
+│   ├── account.hcl
 │   ├── dev
 │   │   ├── dev-1
 │   │   │   ├── us-east-1
 │   │   │   │   ├── compute
-│   │   │   │   │   └── compute_commons.hcl
+│   │   │   │   │   └── compute
 │   │   │   │   ├── databases
-│   │   │   │   │   └── databases_commons.hcl
+│   │   │   │   │   └── databases
 │   │   │   │   ├── network
-│   │   │   │   │   └── network_commons.hcl
-│   │   │   │   ├── region_commons.hcl
+│   │   │   │   │   └── network
+│   │   │   │   ├── region.hcl
 │   │   │   │   ├── secrets
-│   │   │   │   │   └── secrets_commons.hcl
+│   │   │   │   │   └── secrets
 │   │   │   │   └── storage
-│   │   │   │       └── storage_commons.hcl
+│   │   │   │       └── storage
 │   │   │   └── us-west-1
 │   │   │       ├── compute
-│   │   │       │   └── compute_commons.hcl
+│   │   │       │   └── compute
 │   │   │       ├── databases
-│   │   │       │   └── databases_commons.hcl
+│   │   │       │   └── databases
 │   │   │       ├── network
-│   │   │       │   └── network_commons.hcl
-│   │   │       ├── region_commons.hcl
+│   │   │       │   └── network
+│   │   │       ├── region.hcl
 │   │   │       ├── secrets
-│   │   │       │   └── secrets_commons.hcl
+│   │   │       │   └── secrets
 │   │   │       └── storage
-│   │   │           └── storage_commons.hcl
-│   │   └── environment_commons.hcl
+│   │   │           └── storage
+│   │   └── env.hcl
 │   ├── prod
-│   │   ├── environment_commons.hcl
+│   │   ├── env.hcl
 │   │   └── prod-1
 │   │       ├── us-east-1
 │   │       │   ├── compute
-│   │       │   │   └── compute_commons.hcl
+│   │       │   │   └── compute
 │   │       │   ├── databases
-│   │       │   │   └── databases_commons.hcl
+│   │       │   │   └── databases
 │   │       │   ├── network
-│   │       │   │   └── network_commons.hcl
-│   │       │   ├── region_commons.hcl
+│   │       │   │   └── network
+│   │       │   ├── region.hcl
 │   │       │   ├── secrets
-│   │       │   │   └── secrets_commons.hcl
+│   │       │   │   └── secrets
 │   │       │   └── storage
-│   │       │       └── storage_commons.hcl
+│   │       │       └── storage
 │   │       └── us-west-1
 │   │           ├── compute
-│   │           │   └── compute_commons.hcl
+│   │           │   └── compute
 │   │           ├── databases
-│   │           │   └── databases_commons.hcl
+│   │           │   └── databases
 │   │           ├── network
-│   │           │   └── network_commons.hcl
-│   │           ├── region_commons.hcl
+│   │           │   └── network
+│   │           ├── region.hcl
 │   │           ├── secrets
-│   │           │   └── secrets_commons.hcl
+│   │           │   └── secrets
 │   │           └── storage
-│   │               └── storage_commons.hcl
+│   │               └── storage
 │   └── stage
-│       ├── environment_commons.hcl
+│       ├── env.hcl
 │       └── stage-1
 │           ├── us-east-1
 │           │   ├── compute
-│           │   │   └── compute_commons.hcl
+│           │   │   └── compute
 │           │   ├── databases
-│           │   │   └── databases_commons.hcl
+│           │   │   └── databases
 │           │   ├── network
-│           │   │   └── network_commons.hcl
-│           │   ├── region_commons.hcl
+│           │   │   └── network
+│           │   ├── region.hcl
 │           │   ├── secrets
-│           │   │   └── secrets_commons.hcl
+│           │   │   └── secrets
 │           │   └── storage
-│           │       └── storage_commons.hcl
+│           │       └── storage
 │           └── us-west-1
 │               ├── compute
-│               │   └── compute_commons.hcl
+│               │   └── compute
 │               ├── databases
-│               │   └── databases_commons.hcl
+│               │   └── databases
 │               ├── network
-│               │   └── network_commons.hcl
-│               ├── region_commons.hcl
+│               │   └── network
+│               ├── region.hcl
 │               ├── secrets
-│               │   └── secrets_commons.hcl
+│               │   └── secrets
 │               └── storage
-│                   └── storage_commons.hcl
-└── infrastructure_commons.hcl
+│                   └── storage
+└── infrastructure.hcl
 
 44 directories, 41 files
 ```

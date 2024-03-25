@@ -34,15 +34,15 @@ create_structure(){
 	region_commons_filename="region.hcl"
 
 	# Create the infrastructure_commons.hcl file - this file will be used to store the common variables for all the accounts, regions, and environments
-  mkdir -p infrastructures
-	cat <<-HCL > infrastructures/"${infrastructure_commons_filename}"
+  mkdir -p infrastructure-live
+	cat <<-HCL > infrastructure-live/"${infrastructure_commons_filename}"
 	locals {}
 	HCL
 
 	for account in "${accounts[@]}"; do
 		# Create the account_commons.hcl file - this file will be used to store the common variables for all the regions and environments
     mkdir -p infrastructure-live/"${account}"
-		cat <<-HCL > infrastructures/"${account}"/"${account_commons_filename}"
+		cat <<-HCL > infrastructure-live/"${account}"/"${account_commons_filename}"
 		locals {
 		  account_id = "${account}"
 		}
@@ -51,7 +51,7 @@ create_structure(){
 		for environment in "${environments[@]}"; do
 			# Create the environment_commons.hcl file - this file will be used to store the common variables for all the regions
       mkdir -p infrastructure-live/"${account}"/"${environment}"/"${environment}"-1
-			cat <<-HCL > infrastructures/"${account}"/"${environment}"/"${environment_commons_filename}"
+			cat <<-HCL > infrastructure-live/"${account}"/"${environment}"/"${environment_commons_filename}"
 			locals {
 			  environment = "${environment}"
 			}
@@ -59,7 +59,7 @@ create_structure(){
 
 			for region in "${regions[@]}"; do
         mkdir -p infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"
-				cat <<-HCL > infrastructures/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${region_commons_filename}"
+				cat <<-HCL > infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${region_commons_filename}"
 				locals {
 				  region = "${region}"
 				}
@@ -68,7 +68,7 @@ create_structure(){
 				# Create directories & commons for each of them using a loop
 				for dir in "${subjects[@]}"; do
 					mkdir -p infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"
-					cat <<-HCL > infrastructures/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"/"${dir}"
+					cat <<-HCL > infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"/"${dir}"
 					locals {
 					  field = "${dir}"
 					}
