@@ -101,6 +101,17 @@ create_template_file() {
     # We want to reference the variables from the included config in this configuration, so we expose it.
     expose = true
   }
+
+  dependencies {
+    paths = []
+  }
+
+  dependency "public_hosted_zone" {
+    config_path = ""
+    mock_outputs = {}
+  }
+
+  inputs = {}
 	HCL
 }
 
