@@ -14,7 +14,7 @@
 # * @param {string} $1 - The name of the module to create.
 # * @return - None
 # */
-mkmodule() {
+create_module() {
 	if [[ -z $1 ]]; then
 		echo "Module name not provided."
 		return 1
@@ -72,7 +72,7 @@ mkmodule() {
 #  Main   #
 ###########
 main() {
-	mkmodule "$1"
+	create_module "$1"
 }
 
 main "$1"

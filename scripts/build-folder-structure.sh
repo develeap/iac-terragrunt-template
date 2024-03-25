@@ -28,11 +28,10 @@ subjects=('storage' 'network' 'secrets' 'compute' 'databases')
 # */
 create_structure(){
 	mkdir -p modules
-	commons_suffix="_commons.hcl"
-	infrastructure_commons_filename="infrastructure${commons_suffix}"
-	account_commons_filename="account${commons_suffix}"
-	environment_commons_filename="environment${commons_suffix}"
-	region_commons_filename="region${commons_suffix}"
+	infrastructure_commons_filename="infrastructure.hcl"
+	account_commons_filename="account.hcl"
+	environment_commons_filename="env.hcl"
+	region_commons_filename="region.hcl"
 
 	# Create the infrastructure_commons.hcl file - this file will be used to store the common variables for all the accounts, regions, and environments
   mkdir -p infrastructures
@@ -42,39 +41,36 @@ create_structure(){
 
 	for account in "${accounts[@]}"; do
 		# Create the account_commons.hcl file - this file will be used to store the common variables for all the regions and environments
-    mkdir -p infrastructures/"${account}"
+    mkdir -p infrastructure-live/"${account}"
 		cat <<-HCL > infrastructures/"${account}"/"${account_commons_filename}"
 		locals {
-		  infrastructures_vars = try(read_terragrunt_config(find_in_parent_folders("${infrastructure_commons_filename}")), {})
 		  account_id = "${account}"
 		}
 		HCL
 
 		for environment in "${environments[@]}"; do
 			# Create the environment_commons.hcl file - this file will be used to store the common variables for all the regions
-      mkdir -p infrastructures/"${account}"/"${environment}"/"${environment}"-1
+      mkdir -p infrastructure-live/"${account}"/"${environment}"/"${environment}"-1
 			cat <<-HCL > infrastructures/"${account}"/"${environment}"/"${environment_commons_filename}"
 			locals {
-			  account_vars = try(read_terragrunt_config(find_in_parent_folders("${account_commons_filename}")), {})
-			  env = "${environment}"
+			  environment = "${environment}"
 			}
 			HCL
 
 			for region in "${regions[@]}"; do
-        mkdir -p infrastructures/"${account}"/"${environment}"/"${environment}"-1/"${region}"
+        mkdir -p infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"
 				cat <<-HCL > infrastructures/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${region_commons_filename}"
 				locals {
-				  environment_vars = try(read_terragrunt_config(find_in_parent_folders("${environment_commons_filename}")), {})
 				  region = "${region}"
 				}
 				HCL
 
 				# Create directories & commons for each of them using a loop
 				for dir in "${subjects[@]}"; do
-					mkdir -p infrastructures/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"
-					cat <<-HCL > infrastructures/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"/"${dir}${commons_suffix}"
+					mkdir -p infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"
+					cat <<-HCL > infrastructures/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"/"${dir}"
 					locals {
-					  region_vars = try(read_terragrunt_config(find_in_parent_folders("${region_commons_filename}")), {})
+					  field = "${dir}"
 					}
 					HCL
 				done

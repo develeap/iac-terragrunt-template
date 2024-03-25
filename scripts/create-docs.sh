@@ -23,7 +23,7 @@ modules_dir="modules"
 # * @param {string} $1 - The name of the module to create an EXAMPLE.md file for.
 # * @return - None
 # */
-mkexample() {
+create_example_markdown() {
 	if [[ -z $1 ]]; then
 		echo "Module name not provided."
 		return 1
@@ -60,7 +60,7 @@ mkexample() {
 # * @param {string} $1 - The name of the module to create a README.md file for.
 # * @return - None
 # */
-mkdocs() {
+create_docs_markdown() {
 	if [[ -z $1 ]]; then
 		echo "Module name not provided."
 		return 1
@@ -148,8 +148,8 @@ mkdocs() {
 ########
 main() {
 	module_name=$1
-	mkexample "${module_name}"
-	mkdocs "${module_name}"
+	create_example_markdown "${module_name}"
+	create_docs_markdown "${module_name}"
 }
 
 main $1
