@@ -33,7 +33,7 @@ mkexample() {
 	module_path="${modules_dir}"/"${module_name}"
 	example_file="${module_path}"/EXAMPLE.md
 
-	if [[ -f ${example_file} ]]; then
+	if [[ -f "${example_file}" ]]; then
 		echo "EXAMPLE.md file already exists in the module directory."
 		return 1
 	fi
@@ -47,11 +47,11 @@ mkexample() {
 
 	# Create the example.md file with the desired structure
 	cat <<-EOF >"${example_file}"
-		module "${module_name}" {
-			$(echo 'source = "../../path/to/this/module"' | awk '{print "  " $0}')
+	module "${module_name}" {
+	  $(echo 'source = "../../path/to/this/module"' | awk '{print "  " $0}')
 
-			$(echo "$example_config" | awk '{print "  " $0}')
-		}
+	  $(echo "$example_config" | awk '{print "  " $0}')
+	}
 	EOF
 }
 
@@ -68,7 +68,7 @@ mkdocs() {
 
 	module_name="$1"
 	module_path="${modules_dir}/${module_name}"
-	readme_file="$${module_path}/README.md"
+	readme_file="${module_path}"/README.md
 
 	if [ -f "${readme_file}" ]; then
 		echo "README.md file already exists in the module directory."
@@ -122,7 +122,7 @@ mkdocs() {
 	echo "---" >>"${readme_file}"
 
 	# Run terraform-docs to generate module documentation and append it to README.md
-	terraform-docs markdown "$${module_path}" >>"${readme_file}"
+	terraform-docs markdown "${module_path}" >>"${readme_file}"
 
 	# Add a separator between the generated documentation and the Terraform graph
 	echo -e "\n---\n" >>"${readme_file}"
@@ -133,7 +133,7 @@ mkdocs() {
 
 	# Run terraform graph and generate a GRAPH.svg
 	graph_file="./GRAPH.svg"
-	cd $${module_path}
+	cd ${module_path}
 	terraform graph -draw-cycles | dot -Tsvg >>"${graph_file}"
 
 	# deletes init leftovers
@@ -148,8 +148,8 @@ mkdocs() {
 ########
 main() {
 	module_name=$1
-	mkexample ${module_name}
-	mkdocs ${module_name}
+	mkexample "${module_name}"
+	mkdocs "${module_name}"
 }
 
 main $1
