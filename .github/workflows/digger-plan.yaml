@@ -26,7 +26,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: digger run
-        uses: diggerhq/digger@latest
+        uses: diggerhq/digger@v0.4.13
         with:
           #########
           # Setup #
