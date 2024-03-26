@@ -35,8 +35,8 @@ jobs:
           terragrunt-version: 0.54.12
           # terraform-version: v1.5.5
           # opentofu-version: v1.6.0-alpha3
-          # setup-checkov: true
-          # checkov-version: 2.3.360
+          setup-checkov: true
+          checkov-version: 2.3.360
 
           ################
           # AWS Settings #

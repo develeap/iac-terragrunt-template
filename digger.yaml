@@ -17,8 +17,8 @@ workflows:
     plan:
       steps:
         - init
+        - run: checkov -d . --framework terraform
         - plan
         - run: echo "Terragrunt generation!"
-        - run: checkov -d . --framework terraform
 
 
