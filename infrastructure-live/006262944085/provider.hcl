@@ -61,12 +61,12 @@ generate "provider" {
     region  = "${local.region}"
     profile = "${local.profile}"
 
-    assume_role {
-      role_arn      = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      #policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
-      session_name  = "Local-Session"
-      duration = "0h20m0s"
-    }
+    #assume_role {
+    #  role_arn      = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+    #  #policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+    #  session_name  = "Local-Session"
+    #  duration = "0h20m0s"
+    #}
 
     # Only these AWS Account IDs may be operated on by this template
     allowed_account_ids = ["${local.account_id}"]
@@ -95,11 +95,11 @@ remote_state {
     encrypt        = true
     kms_key_id     = "${local.kms_key_id}"
     dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
-    assume_role = {
-      role_arn     = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      #external_id  = "terraform-${local.env}"
-      session_name = "Local-Session"
-    }
+    #assume_role = {
+    #  role_arn     = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+    #  #external_id  = "terraform-${local.env}"
+    #  session_name = "Local-Session"
+    #}
     s3_bucket_tags = jsondecode("${local.tags_all}")
     dynamodb_table_tags = jsondecode("${local.tags_all}")
   }
