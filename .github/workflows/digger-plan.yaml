@@ -42,7 +42,7 @@ jobs:
           # AWS Settings #
           ################
           setup-aws: true
-          aws-role-to-assume: arn:aws:iam::{AccountID}:role/{RoleName}**
+          aws-role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/$${{ secrets.ROLE_NAME }}
           aws-region: us-east-1
 
           ###################

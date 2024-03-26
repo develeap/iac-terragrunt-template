@@ -1,4 +1,4 @@
-terraform_version_constraint  = ">= 1.6.6"
+terraform_version_constraint = ">= 1.6.6"
 terragrunt_version_constraint = ">= 0.54.12"
 
 locals {
@@ -7,7 +7,7 @@ locals {
 
   # Automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-
+  
   # Automatically load region-level variables
   region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
 
@@ -22,7 +22,7 @@ locals {
   # TAGS
   tg_tags = tomap({ Terragrunt = "True" })
   computed_tags = tomap({
-    LastModifiedTime = "${timestamp()}", // uncomment only after delivery
+    LastModifiedTime = "${timestamp()}" // uncomment only after delivery
     #LastModifiedBy   = "${get_aws_caller_identity_arn()}"
   })
   account_tags = tomap({
@@ -36,11 +36,11 @@ locals {
     Environment = "${local.env}"
   })
   compliance_tags = tomap({
-    Owner      = "Lior Dux",
-    Birthdate  = "${timestamp()}",
-    Objective  = "Digger with Terragrunt",
-    Expiration = "${timeadd(timestamp(), "24h")}",
-    Name       = "Lior Dux"
+    Owner = "Lior Dux",
+    Birthdate = "${timestamp()}",
+    Objective = "Digger with Terragrunt",
+    Expiration = "${timeadd(timestamp()), "24h"}",
+    Name = "Lior Dux" 
   })
   tags_all = jsonencode(merge(
     local.tg_tags,
@@ -56,7 +56,7 @@ generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
 
-  contents = <<-PROVIDER
+  contents = <<-PRODIVER
   provider "aws" {
     region  = "${local.region}"
     profile = "${local.profile}"
@@ -76,7 +76,7 @@ generate "provider" {
       tags = ${local.tags_all}
     }
   }
-  PROVIDER
+  PRODIVER
 }
 
 remote_state {
@@ -94,11 +94,11 @@ remote_state {
     #endpoint       = "https://s3.eu-central-1.amazonaws.com"
     encrypt        = true
     kms_key_id     = "${local.kms_key_id}"
-    dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
+    dynamodb_table = "${local.env}.terraform_remote_state_lock.dynamodb"
     assume_role = {
-      role_arn     = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      #external_id  = "terraform-${local.env}"
-      session_name = "Local-Session"
+      role_arn      = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+      #external_id   = "terraform-${local.env}"
+      session_name  = "Local-Session"
     }
     s3_bucket_tags = jsondecode("${local.tags_all}")
     dynamodb_table_tags = jsondecode("${local.tags_all}")
