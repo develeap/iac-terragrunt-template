@@ -107,3 +107,8 @@ create-docs $MODULE:
 build-folder-structure:
   @echo "Building folder structure..."
   bash ./scripts/build-folder-structure.sh
+
+# Create a new Terragrunt module
+create-terragrunt-module $MODULE:
+  @echo "Creating a new Terragrunt module..."
+  @bash ./scripts/create-terragrunt-module.sh $MODULE
