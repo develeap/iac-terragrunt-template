@@ -58,7 +58,7 @@ include "provider" {
 
 inputs = {
   #name = "${local.environment_vars.locals.evn}.demo-instance.ec2"
-  name                   = "${include.root.locals.env}.demo-instance.ec2"
+  name                   = "${include.provider.locals.env}.demo-instance.ec2"
   instance_type          = "t3.micro"
   vpc_security_group_ids = ["sg-03a28927b740df64e"]
   subnet_id              = "subnet-075ffae68d9b0487a"
