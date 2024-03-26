@@ -59,7 +59,7 @@ generate "provider" {
   contents = <<-PROVIDER
   provider "aws" {
     region  = "${local.region}"
-    profile = "${local.profile}"
+    #profile = "${local.profile}"
 
     #assume_role {
     #  role_arn      = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
@@ -89,7 +89,7 @@ remote_state {
   config = {
     bucket         = "${local.env}.${local.account_id}-terraform-remote-state.s3"
     key            = "${path_relative_to_include()}/terraform.tfstate"
-    profile        = "${local.profile}"
+    #profile        = "${local.profile}"
     region         = "${local.region}"
     #endpoint       = "https://s3.eu-central-1.amazonaws.com"
     encrypt        = true
