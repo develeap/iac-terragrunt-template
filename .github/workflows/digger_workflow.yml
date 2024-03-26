@@ -20,7 +20,6 @@ on:
   issue_comment:
     types: [created]
     if: contains(github.event.comment.body, 'digger')
-  workflow_dispatch:
 
 # Set the width of the terminal for better formatting
 env:
