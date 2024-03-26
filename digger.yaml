@@ -16,11 +16,13 @@ workflows:
   default:
     plan:
       steps:
+        - hclfmt
         - init
         - run: checkov -d . --framework terraform
         - plan
         - run: echo "Terragrunt generation!"
     apply:
       steps:
+        - hclfmt
         - apply
 

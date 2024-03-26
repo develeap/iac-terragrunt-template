@@ -5,10 +5,10 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 terraform {
-  #source = "tfr://registry.terraform.io/terraform-aws-modules/ec2-instance/aws?version=5.6.1"
+  source = "tfr://registry.terraform.io/terraform-aws-modules/ec2-instance/aws?version=5.6.1"
   #source = "tfr://registry.opentofu.io/terraform-aws-modules/ec2-instance/aws?version=5.6.1"
   #source = "git::git@github.com:acme/infrastructure-modules.git//networking/vpc?ref=v0.0.1"
-  source = "\${get_path_to_repo_root()}//modules/"
+  #source = "${get_path_to_repo_root()}//modules/"
 
 
   before_hook "before_hook" {

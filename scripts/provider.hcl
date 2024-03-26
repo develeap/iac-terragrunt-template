@@ -87,20 +87,20 @@ remote_state {
   }
 
   config = {
-    bucket         = "${local.env}.${local.account_id}-terraform-remote-state.s3"
-    key            = "${path_relative_to_include()}/terraform.tfstate"
-    profile        = "${local.profile}"
-    region         = "${local.region}"
+    bucket  = "${local.env}.${local.account_id}-terraform-remote-state.s3"
+    key     = "${path_relative_to_include()}/terraform.tfstate"
+    profile = "${local.profile}"
+    region  = "${local.region}"
     #endpoint       = "https://s3.eu-central-1.amazonaws.com"
     encrypt        = true
     kms_key_id     = "${local.kms_key_id}"
     dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
     assume_role = {
-      role_arn     = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
       #external_id  = "terraform-${local.env}"
       session_name = "Local-Session"
     }
-    s3_bucket_tags = jsondecode("${local.tags_all}")
+    s3_bucket_tags      = jsondecode("${local.tags_all}")
     dynamodb_table_tags = jsondecode("${local.tags_all}")
   }
 }
