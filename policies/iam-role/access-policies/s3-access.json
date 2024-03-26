@@ -23,7 +23,7 @@
                 "s3:PutLifecycleConfiguration",
                 "s3:PutBucketOwnershipControls"
             ],
-            "Resource": "arn:aws:s3:::BUCKET_NAME"
+            "Resource": "arn:aws:s3:::prod.0123456790-terrafrom-remote-state.s3"
         },
         {
             "Sid": "AllowGetAndPutS3ActionsOnSpecifiedTerragruntBucketPath",
@@ -32,7 +32,7 @@
                 "s3:PutObject",
                 "s3:GetObject"
             ],
-            "Resource": "arn:aws:s3:::BUCKET_NAME/some/path/here"
+            "Resource": "arn:aws:s3:::prod.0123456790-terrafrom-remote-state.s3/*"
         }
     ]
 }

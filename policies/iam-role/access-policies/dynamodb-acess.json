@@ -11,7 +11,7 @@
                 "dynamodb:DeleteItem",
                 "dynamodb:CreateTable"
             ],
-            "Resource": "arn:aws:dynamodb:*:*:table/TABLE_NAME"
+            "Resource": "arn:aws:dynamodb:il-central-1:01234567890:table/*.terraform_remote-state-lock.dynamodb"
         }
     ]
 }
