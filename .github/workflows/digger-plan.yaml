@@ -11,6 +11,10 @@ on:
     if: contains(github.event.comment.body, 'digger')
   workflow_dispatch:
 
+# Set the width of the terminal for better formatting
+env:
+  COLUMNS: 120
+
 jobs:
   build:
     runs-on: ubuntu-latest
