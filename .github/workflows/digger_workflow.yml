@@ -1,6 +1,17 @@
 name: Digger Pull Request Workflow
 
 on:
+  workflow_dispatch:
+    inputs:
+      id:
+        description: 'run identifier'
+        required: false
+      job:
+        required: true
+        description: 'job name'
+      comment_id:
+        required: true
+        description: 'comment id'
   pull_request:
     branches:
       - main
