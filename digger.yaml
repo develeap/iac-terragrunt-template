@@ -18,7 +18,7 @@ workflows:
       steps:
         - hclfmt
         - init
-        - run: checkov -d . --framework terraform
+        - run: checkov -d . --quite --framework terraform
         - plan
         - run: echo "Terragrunt generation!"
     apply:
