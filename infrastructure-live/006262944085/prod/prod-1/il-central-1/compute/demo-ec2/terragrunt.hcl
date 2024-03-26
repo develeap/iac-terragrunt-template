@@ -56,10 +56,6 @@ include "provider" {
   expose = true
 }
 
-locals {
-  env = "prod"
-}
-
 inputs = {
   #name = "${local.environment_vars.locals.evn}.demo-instance.ec2"
   name                   = "${local.env}.demo-instance.ec2"
