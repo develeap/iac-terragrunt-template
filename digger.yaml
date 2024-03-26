@@ -18,11 +18,13 @@ workflows:
       steps:
         - hclfmt
         - init
-        - run: checkov -d . --quiet --framework terraform
+        - run: checkov -d . --quiet --framework terraform --download-external-modules
         - plan
-        - run: echo "Terragrunt generation!"
     apply:
       steps:
         - hclfmt
         - apply
 
+    destroy:
+      steps:
+        - destroy
