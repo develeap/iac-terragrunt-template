@@ -1,3 +1,6 @@
+terraform_version_constraint = ">= 1.6.6"
+terragrunt_version_constraint = ">= 0.54.12"
+
 locals {
   # Automatically load account-level variables
   account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
@@ -19,8 +22,8 @@ locals {
   # TAGS
   tg_tags = tomap({ Terragrunt = "True" })
   computed_tags = tomap({
-    # LastModifiedTime = "${timestamp()}" // uncomment only after delivery
-    # LastModifiedBy   = "${get_aws_caller_identity_arn()}"
+    LastModifiedTime = "${timestamp()}" // uncomment only after delivery
+    LastModifiedBy   = "${get_aws_caller_identity_arn()}"
   })
   account_tags = tomap({
     AccountName = "${local.account_name}",
@@ -32,12 +35,20 @@ locals {
   env_tags = tomap({
     Environment = "${local.env}"
   })
+  compliance_tags = tomap({
+    Owner = "Lior Dux"
+    Birthdate = ${timestamp()}
+    Objective = "Digger with Terragrunt"
+    Expiration = ${timestampadd("1d", timestamp())}
+    Name = "Lior Dux" 
+  })
   tags_all = jsonencode(merge(
     local.tg_tags,
     local.computed_tags,
     local.account_tags,
     local.region_tags,
     local.env_tags,
+    local.compliance_tags
   ))
 }
 
@@ -51,7 +62,7 @@ generate "provider" {
     profile = "${local.profile}
 
     assume_role {
-      role_arn      = "arn:aws:iam::"${local.account_id}":role/${local.env}.terraform_bot.role"
+      role_arn      = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
       policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
       session_name  = "Local-Session"
       duration = 0h20m0s

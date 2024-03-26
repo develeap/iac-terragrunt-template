@@ -12,9 +12,9 @@
 ###########
 # Globals #
 ###########
-accounts=('82281136')
-regions=('us-east-1' 'us-west-1')
-environments=('prod' 'stage' 'dev')
+accounts=('006262944085')
+regions=('il-central-1')
+environments=('prod')
 subjects=('storage' 'network' 'secrets' 'compute' 'databases')
 
 #############
@@ -45,8 +45,12 @@ create_structure(){
 		cat <<-HCL > infrastructure-live/"${account}"/"${account_commons_filename}"
 		locals {
 		  account_id = "${account}"
+      account_name = "my-account-name" # Set this to your account name
+      kms_key_id = "arn:aws:kms:us-east-1:${account}:key/12345678-1234-1234-1234-123456789012" # Set this to your KMS key ID
+      profile = "my-profile" # Set this to your AWS profile
 		}
 		HCL
+    cp ./scripts/provider.hcl infrastructure-live/"${account}"/provider.hcl
 
 		for environment in "${environments[@]}"; do
 			# Create the environment_commons.hcl file - this file will be used to store the common variables for all the regions
@@ -68,7 +72,7 @@ create_structure(){
 				# Create directories & commons for each of them using a loop
 				for dir in "${subjects[@]}"; do
 					mkdir -p infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"
-					cat <<-HCL > infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"/"${dir}"
+					cat <<-HCL > infrastructure-live/"${account}"/"${environment}"/"${environment}"-1/"${region}"/"${dir}"/"${dir}.hcl"
 					locals {
 					  field = "${dir}"
 					}
