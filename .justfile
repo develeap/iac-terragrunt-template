@@ -11,93 +11,101 @@
 #   like a script, with `./justfile test`, for example.
 
 set ignore-comments := false
+
 log := "warn"
 
 #############
 ## Chooser ##
 #############
+
+# Run fuzzy finder selector
 default:
-  @just --choose
+    @just --choose
 
 #############
 ## Install ##
 #############
+
 # Install Sops
 install-sops:
-  @echo "Installing Sops using Homebrew..."
-  brew install sops 
+    @echo "Installing Sops using Homebrew..."
+    brew install sops 
 
 # Install Age
 install-age:
-  @echo "Installing Age using Homebrew..."
-  brew install age 
+    @echo "Installing Age using Homebrew..."
+    brew install age 
 
 # Install Sops plugin for vscode
 install-code-sops:
-  @echo "Installing Sops plugin for vscode..."
-  code --install-extension signageos.signageos-vscode-sops --install-extension mikestead.dotenv
+    @echo "Installing Sops plugin for vscode..."
+    code --install-extension signageos.signageos-vscode-sops --install-extension mikestead.dotenv
 
 ###############
 ## Configure ##
 ###############
+
 # Configure Sops with a KMS key
 config-kms:
-  @echo "Ensure you have the AWS CLI installed and configured with the right profile!"
-  @echo "Configuring Sops with kms..."
+    @echo "Ensure you have the AWS CLI installed and configured with the right profile!"
+    @echo "Configuring Sops with kms..."
 
-  echo 'awsProfile: ${AWS_PROFILE:-default}' >> .sopsrc
+    echo 'awsProfile: ${AWS_PROFILE:-default}' >> .sopsrc
 
-  cat <<-YAML > .sops.yaml
-  creation_rules:
-  - path_regex: .yaml$
-  - kms: $(aws kms list-keys --output json | jq -r '.Keys[] | .KeyArn' | fzf)
-  YAML
+    cat <<-YAML > .sops.yaml
+    creation_rules:
+    - path_regex: .yaml$
+    - kms: $(aws kms list-keys --output json | jq -r '.Keys[] | .KeyArn' | fzf)
+    YAML
 
 # Run the build command
 config-age:
-  @echo "Configuring Sops with Age..."
-  mkdir -p ~/.sops/age
-  age-keygen -o ~/.sops/age/key.txt
-  echo 'export SOPS_AGE_KEY_FILE="$HOME/.sops/age/key.txt" >> ~/.zshrc'
-  source ~/.zshrc
-  
-  echo 'ageKeyFile: ~/.sops/age/key.txt' >> .sopsrc
-  
-  cat <<-YAML > .sops.yaml
-  creation_rules:
-  - path_regex: .yaml$
-  - age: $(cat $SOPS_AGE_KEY_FILE | grep -o "public key: .*" | awk '{print $NF}')
-  YAML
+    @echo "Configuring Sops with Age..."
+    mkdir -p ~/.sops/age
+    age-keygen -o ~/.sops/age/key.txt
+    echo 'export SOPS_AGE_KEY_FILE="$HOME/.sops/age/key.txt" >> ~/.zshrc'
+    source ~/.zshrc
+
+    echo 'ageKeyFile: ~/.sops/age/key.txt' >> .sopsrc
+
+    cat <<-YAML > .sops.yaml
+    creation_rules:
+    - path_regex: .yaml$
+    - age: $(cat $SOPS_AGE_KEY_FILE | grep -o "public key: .*" | awk '{print $NF}')
+    YAML
 
 ################
 ## Encryption ##
 ################
+
 # Encrypt a file
 encrypt *FILE:
-  @echo "Encrypting $FILE..."
-  sops --encrypt --in-place $FILE
+    @echo "Encrypting $FILE..."
+    sops --encrypt --in-place $FILE
 
 ################
 ## Decryption ##
 ################
+
 # Encrypt a file
 decrypt *FILE:
-  @echo "Decrypting $FILE..."
-  sops --decrypt --in-place $FILE
+    @echo "Decrypting $FILE..."
+    sops --decrypt --in-place $FILE
 
 #############
 # Terraform #
 #############
-set positional-arguments := true
+# set positional-arguments := true
+
 # Create a new Terraform module
-create-module $MODULE:
-  @echo "Creating a new Terraform module..."
-  @bash ./scripts/create-module.sh $MODULE 
+create-tf-module *MODULE:
+    @echo "Creating a new Terraform module..."
+    @bash ./scripts/create-module.sh $MODULE 
 
 # Create documentation for a Terraform module
-create-docs $MODULE:
-  @echo "Creating documentation for $MODULE..."
-  @bash ./scripts/create-docs.sh $MODULE
+create-tf-docs *MODULE:
+    @echo "Creating documentation for $MODULE..."
+    @bash ./scripts/create-docs.sh $MODULE
 
 ##############
 # Terragrunt #
@@ -105,5 +113,10 @@ create-docs $MODULE:
 
 # Build folder structure
 build-folder-structure:
-  @echo "Building folder structure..."
-  bash ./scripts/build-folder-structure.sh
+    @echo "Building folder structure..."
+    bash ./scripts/build-folder-structure.sh
+
+# Create a new Terragrunt module
+create-tg-module *MODULE:
+    @echo "Creating a new Terragrunt module..."
+    @bash ./scripts/create-terragrunt-module.sh $MODULE
