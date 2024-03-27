@@ -11,7 +11,7 @@
 #   like a script, with `./justfile test`, for example.
 
 set ignore-comments := false
-
+set positional-arguments := true
 log := "warn"
 
 #############
@@ -68,7 +68,7 @@ config-age:
 
     echo 'ageKeyFile: ~/.sops/age/key.txt' >> .sopsrc
 
-    cat <<-YAML > .sops.yaml
+    cat <<-YAL > .sops.yaml
     creation_rules:
     - path_regex: .yaml$
     - age: $(cat $SOPS_AGE_KEY_FILE | grep -o "public key: .*" | awk '{print $NF}')
@@ -79,33 +79,32 @@ config-age:
 ################
 
 # Encrypt a file
-encrypt *FILE:
-    @echo "Encrypting $FILE..."
-    sops --encrypt --in-place $FILE
+encrypt {{FILE}}:
+    @echo "Encrypting {{FILE}}..."
+    sops --encrypt --in-place {{FILE}}
 
 ################
 ## Decryption ##
 ################
 
 # Encrypt a file
-decrypt *FILE:
-    @echo "Decrypting $FILE..."
-    sops --decrypt --in-place $FILE
+decrypt {{FILE}}:
+    @echo "Decrypting {{FILE}}..."
+    sops --decrypt --in-place {{FILE}}
 
 #############
 # Terraform #
 #############
-# set positional-arguments := true
 
 # Create a new Terraform module
-create-tf-module *MODULE:
+create-tf-module NAME:
     @echo "Creating a new Terraform module..."
-    @bash ./scripts/create-module.sh $MODULE 
+    @bash ./scripts/create-module.sh {{NAME}} 
 
 # Create documentation for a Terraform module
-create-tf-docs *MODULE:
-    @echo "Creating documentation for $MODULE..."
-    @bash ./scripts/create-docs.sh $MODULE
+create-tf-docs NAME:
+    @echo "Creating documentation for {{NAME}} module..."
+    @bash ./scripts/create-docs.sh {{NAME}}
 
 ##############
 # Terragrunt #
@@ -117,6 +116,6 @@ build-folder-structure:
     bash ./scripts/build-folder-structure.sh
 
 # Create a new Terragrunt module
-create-tg-module *MODULE:
+create-tg-module NAME:
     @echo "Creating a new Terragrunt module..."
-    @bash ./scripts/create-terragrunt-module.sh $MODULE
+    @bash ./scripts/create-terragrunt-module.sh {{NAME}}
