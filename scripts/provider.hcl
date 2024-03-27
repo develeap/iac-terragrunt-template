@@ -50,6 +50,56 @@ locals {
     local.env_tags,
     local.compliance_tags
   ))
+  provider_a = <<-PROVIDER_A
+  provider "aws" {
+    region  = "${local.region}"
+    profile = "${local.profile}"
+
+    assume_role {
+      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+      #policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+      session_name = "Local-Session"
+      duration     = "0h20m0s"
+    }
+
+    # Only these AWS Account IDs may be operated on by this template
+    allowed_account_ids = ["${local.account_id}"]
+
+    default_tags {
+      # Use heredoc syntax to render the json to avoid quoting complications.
+      tags = jsondecode(
+      <<-INNEREOF
+      ${local.tags_all}
+      INNEREOF
+      )
+    }
+  }
+  PROVIDER_A
+  provider_b = <<-PROVIDER_B
+  provider "aws" {
+    region  = "${local.region}"
+
+    # Web Identity Role Federation only used in CI/CD
+    assume_role_with_web_identity {
+      role_arn           = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+      session_name       = "Pipeline-Session"
+      duration           = "0h20m0s"
+      web_identity_token = get_env("AWS_SESSION_TOKEN", "")
+    }
+
+    # Only these AWS Account IDs may be operated on by this template
+    allowed_account_ids = ["${local.account_id}"]
+
+    default_tags {
+      # Use heredoc syntax to render the json to avoid quoting complications.
+      tags = jsondecode(
+      <<-INNEREOF
+      ${local.tags_all}
+      INNEREOF
+      )
+    }
+  }
+  PROVIDER_B
 }
 
 generate "provider" {
@@ -59,7 +109,9 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  contents = get_env("GITHUB_REF", NULL) != NULL ? file(format("%s//scripts/provider-a.hcl", get_path_to_repo_root())) : file(format("%s//scripts/provider-b.hcl", get_path_to_repo_root()))
+  #contents = get_env("GITHUB_REF", "NULL") != "NULL" ? file(format("%s//scripts/provider-a.hcl", get_repo_root())) : file(format("%s//scripts/provider-b.hcl", get_repo_root()))
+  #contents = get_env("GITHUB_REF", "NULL") != "NULL" ? read_terragrunt_config(format("%s//scripts/provider-a.hcl", get_repo_root())) : read_terragrunt_config(format("%s//scripts/provider-b.hcl", get_repo_root()))
+  contents = get_env("GITHUB_REF", "NULL") == "NULL" ? "${local.provider_a}" : "${local.provider_b}"
 }
 
 remote_state {
