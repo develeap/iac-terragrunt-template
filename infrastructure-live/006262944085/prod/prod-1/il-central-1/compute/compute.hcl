@@ -1,4 +1,4 @@
 locals {
-  field = "compute"
+  field         = "compute"
   instance_type = "t3.micro"
 }

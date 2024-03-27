@@ -66,12 +66,7 @@ locals {
     allowed_account_ids = ["${local.account_id}"]
 
     default_tags {
-      # Use heredoc syntax to render the json to avoid quoting complications.
-      tags = jsondecode(
-      <<-INNEREOF
-      ${local.tags_all}
-      INNEREOF
-      )
+      tags = ${local.tags_all}
     }
   }
   PROVIDER_A
@@ -91,12 +86,7 @@ locals {
     allowed_account_ids = ["${local.account_id}"]
 
     default_tags {
-      # Use heredoc syntax to render the json to avoid quoting complications.
-      tags = jsondecode(
-      <<-INNEREOF
-      ${local.tags_all}
-      INNEREOF
-      )
+      tags = ${local.tags_all}
     }
   }
   PROVIDER_B
