@@ -59,7 +59,7 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  contents = get_env("GITHUB_REF", NULL) != NULL ? file(get_path_to_repo_root()//scripts/"provider-a.hcl") : file(get_path_to_repo_root()//scripts/"provider-b.hcl")
+  contents = get_env("GITHUB_REF", NULL) != NULL ? file(format("%s//scripts/provider-a.hcl", get_path_to_repo_root())) : file(format("%s//scripts/provider-b.hcl", get_path_to_repo_root()))
 }
 
 remote_state {
