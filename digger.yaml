@@ -13,18 +13,22 @@ generate_projects:
     createWorkspace: true
     defaultWorkflow: default
 workflows:
+  # To be run on every pull request, by default
   default:
     plan:
       steps:
         - hclfmt
         - init
-        - run: checkov -d . --quiet --framework terraform #--download-external-modules
+        - run: checkov -d . --quiet --framework terraform --download-external-modules true
         - plan
-    apply:
-      steps:
-        - hclfmt
-        - apply
 
-    destroy:
-      steps:
-        - destroy
+  # To be run on only by invoking the /digger commands in a PR
+  # comments-only:
+  #   apply:
+  #     steps:
+  #       - hclfmt
+  #       - apply
+  #
+  #   destroy:
+  #     steps:
+  #       - destroy
