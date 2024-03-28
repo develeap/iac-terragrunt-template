@@ -15,11 +15,6 @@
 # * @return - None
 # */
 create_module() {
-	if [[ -z $1 ]]; then
-		echo "Module name not provided."
-		return 1
-	fi
-
 	modules_dir="modules"
 	module_name=$1
 	module_path="${modules_dir}"/"${module_name}"
@@ -72,7 +67,12 @@ create_module() {
 #  Main   #
 ###########
 main() {
-	create_module "$1"
+  module_name=$1
+  if [[ -z "${module_name}" ]]; then
+    echo "Module name not provided."
+    read -r -p "Enter the module name: " module_name
+  fi
+	create_module "${module_name}"
 }
 
 main "$1"

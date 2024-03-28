@@ -56,11 +56,6 @@ create_example_markdown() {
 # * @return - None
 # */
 create_docs_markdown() {
-	if [[ -z $1 ]]; then
-		echo "Module name not provided."
-		return 1
-	fi
-
 	module_name="$1"
 	module_path="${modules_dir}/${module_name}"
 	readme_file="${module_path}"/README.md
@@ -138,6 +133,10 @@ create_docs_markdown() {
 ########
 main() {
 	module_name=$1
+  if [[ -z "${module_name}" ]]; then
+    echo "Module name not provided."
+    read -r -p "Enter the module name: " module_name
+  fi
 	create_example_markdown "${module_name}"
 	create_docs_markdown "${module_name}"
 }
