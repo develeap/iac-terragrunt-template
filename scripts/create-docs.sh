@@ -124,7 +124,7 @@ create_docs_markdown() {
 	# Run terraform graph and generate a GRAPH.svg
 	graph_file="./GRAPH.svg"
 	cd ${module_path}
-	terraform graph -draw-cycles | dot -Tsvg >>"${graph_file}"
+	terraform graph -draw-cycles | dot -Tsvg > "${graph_file}"
 
 	# deletes init leftovers
 	rm -rf .terraform && rm .terraform.lock.hcl
