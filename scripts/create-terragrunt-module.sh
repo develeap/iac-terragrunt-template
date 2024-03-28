@@ -71,7 +71,7 @@ create_template_file() {
         "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ",
         "Finished Running Terrafom",
         "   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        ]
+      ]
     }
     
     # After an error occurs during apply or plan, run "echo Error Hook executed". This hook is configured so that it will run
@@ -79,12 +79,12 @@ create_template_file() {
     error_hook "error_hook_1" {
       commands  = ["apply", "plan"]
       on_errors = [".*"]
-        execute = [
-          "echo",
-          "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  ",
-          "Finished Running Terrafom",
-          "   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-        ]
+      execute = [
+        "echo",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  ",
+        "Finished Running Terrafom",
+        "   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      ]
     }
 
     # For any terraform commands that use locking, make sure to configure a lock timeout of 20 minutes.

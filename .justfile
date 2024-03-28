@@ -79,18 +79,18 @@ config-age:
 ################
 
 # Encrypt a file
-encrypt {{FILE}}:
-    @echo "Encrypting {{FILE}}..."
-    sops --encrypt --in-place {{FILE}}
+encrypt *FILE:
+    @echo "Encrypting *FILE..."
+    sops --encrypt --in-place *FILE
 
 ################
 ## Decryption ##
 ################
 
 # Encrypt a file
-decrypt {{FILE}}:
-    @echo "Decrypting {{FILE}}..."
-    sops --decrypt --in-place {{FILE}}
+decrypt *FILE:
+    @echo "Decrypting *FILE..."
+    sops --decrypt --in-place *FILE
 
 #############
 # Terraform #

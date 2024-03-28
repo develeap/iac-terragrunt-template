@@ -20,6 +20,13 @@ This repository is a template to be used for future terragrunt projects. It cont
 - [Terragrunt](https://terragrunt.gruntwork.io/docs/getting-started/install/)
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
 - [Justfile](https://just.systems)
+- [dot](https://graphviz.org/download/)
+- [terraform-docs](https://terraform-docs.io/)
+
+Can be install using:
+```bash
+brew install terraform terragrunt awscli just graphviz terraform-docs
+```
 
 ## Getting Started
 To get started, you can use this repository as a template and clone it to your local machine. After that, you can start creating your own modules and terragrunt configurations.

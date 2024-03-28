@@ -89,7 +89,6 @@ remote_state {
     dynamodb_table = "${local.env}.terraform_remote_state_lock.dynamodb"
     assume_role = {
       role_arn      = "arn:aws:iam::"${local.account_id}":role/${local.env}.terraform_bot.role"
-      policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
       session_name  = "Local-Session"
       duration = 0h20m0s
     }
