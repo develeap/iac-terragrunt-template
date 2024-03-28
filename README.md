@@ -36,6 +36,7 @@ Make sure to check the [Cheat Sheet](/CheatSheet.md) for some useful commands an
 
 ## Usage
 Use the Justfile provided in this repository to run various commands. You can see the available commands by running `just --list`.
+[![asciicast](https://asciinema.org/a/oy1cKWQRrgs5EUZDDvaOZBc2E.svg)](https://asciinema.org/a/oy1cKWQRrgs5EUZDDvaOZBc2E)
 
 ### Build the infrastructure folder structure
 To build the infrastructure folder structure, run the following command:

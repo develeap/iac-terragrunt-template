@@ -1,0 +1,3 @@
+variable "example" {
+  type = string
+}
