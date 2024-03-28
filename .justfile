@@ -11,11 +11,7 @@
 #   like a script, with `./justfile test`, for example.
 
 set ignore-comments := false
-<<<<<<< HEAD
-
-=======
 set positional-arguments := true
->>>>>>> demo
 log := "warn"
 
 #############
@@ -72,11 +68,7 @@ config-age:
 
     echo 'ageKeyFile: ~/.sops/age/key.txt' >> .sopsrc
 
-<<<<<<< HEAD
     cat <<-YAML > .sops.yaml
-=======
-    cat <<-YAL > .sops.yaml
->>>>>>> demo
     creation_rules:
     - path_regex: .yaml$
     - age: $(cat $SOPS_AGE_KEY_FILE | grep -o "public key: .*" | awk '{print $NF}')
@@ -88,13 +80,8 @@ config-age:
 
 # Encrypt a file
 encrypt *FILE:
-<<<<<<< HEAD
-    @echo "Encrypting $FILE..."
-    sops --encrypt --in-place $FILE
-=======
     @echo "Encrypting *FILE..."
     sops --encrypt --in-place {{FILE}}
->>>>>>> demo
 
 ################
 ## Decryption ##
@@ -102,19 +89,12 @@ encrypt *FILE:
 
 # Encrypt a file
 decrypt *FILE:
-<<<<<<< HEAD
-    @echo "Decrypting $FILE..."
-    sops --decrypt --in-place $FILE
-=======
     @echo "Decrypting *FILE..."
     sops --decrypt --in-place {{FILE}}
->>>>>>> demo
 
 #############
 # Terraform #
 #############
-<<<<<<< HEAD
-# set positional-arguments := true
 
 # Create a new Terraform module
 create-tf-module *MODULE:
@@ -125,7 +105,6 @@ create-tf-module *MODULE:
 create-tf-docs *MODULE:
     @echo "Creating documentation for $MODULE..."
     @bash ./scripts/create-docs.sh $MODULE
-=======
 
 # Create a new Terraform module
 create-tf-module *NAME:
@@ -136,7 +115,6 @@ create-tf-module *NAME:
 create-tf-docs *NAME:
     @echo "Creating documentation for {{NAME}} module..."
     @bash ./scripts/create-docs.sh {{NAME}}
->>>>>>> demo
 
 ##############
 # Terragrunt #
@@ -148,12 +126,6 @@ build-folder-structure:
     bash ./scripts/build-folder-structure.sh
 
 # Create a new Terragrunt module
-<<<<<<< HEAD
-create-tg-module *MODULE:
-    @echo "Creating a new Terragrunt module..."
-    @bash ./scripts/create-terragrunt-module.sh $MODULE
-=======
 create-tg-module *NAME:
     @echo "Creating a new Terragrunt module..."
     @bash ./scripts/create-terragrunt-module.sh {{NAME}}
->>>>>>> demo
