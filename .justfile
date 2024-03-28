@@ -97,16 +97,6 @@ decrypt *FILE:
 #############
 
 # Create a new Terraform module
-create-tf-module *MODULE:
-    @echo "Creating a new Terraform module..."
-    @bash ./scripts/create-module.sh $MODULE 
-
-# Create documentation for a Terraform module
-create-tf-docs *MODULE:
-    @echo "Creating documentation for $MODULE..."
-    @bash ./scripts/create-docs.sh $MODULE
-
-# Create a new Terraform module
 create-tf-module *NAME:
     @echo "Creating a new Terraform module..."
     @bash ./scripts/create-module.sh {{NAME}} 
