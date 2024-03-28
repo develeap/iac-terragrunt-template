@@ -81,7 +81,7 @@ config-age:
 # Encrypt a file
 encrypt *FILE:
     @echo "Encrypting *FILE..."
-    sops --encrypt --in-place *FILE
+    sops --encrypt --in-place {{FILE}}
 
 ################
 ## Decryption ##
@@ -90,19 +90,19 @@ encrypt *FILE:
 # Encrypt a file
 decrypt *FILE:
     @echo "Decrypting *FILE..."
-    sops --decrypt --in-place *FILE
+    sops --decrypt --in-place {{FILE}}
 
 #############
 # Terraform #
 #############
 
 # Create a new Terraform module
-create-tf-module NAME:
+create-tf-module *NAME:
     @echo "Creating a new Terraform module..."
     @bash ./scripts/create-module.sh {{NAME}} 
 
 # Create documentation for a Terraform module
-create-tf-docs NAME:
+create-tf-docs *NAME:
     @echo "Creating documentation for {{NAME}} module..."
     @bash ./scripts/create-docs.sh {{NAME}}
 
@@ -116,6 +116,6 @@ build-folder-structure:
     bash ./scripts/build-folder-structure.sh
 
 # Create a new Terragrunt module
-create-tg-module NAME:
+create-tg-module *NAME:
     @echo "Creating a new Terragrunt module..."
     @bash ./scripts/create-terragrunt-module.sh {{NAME}}
