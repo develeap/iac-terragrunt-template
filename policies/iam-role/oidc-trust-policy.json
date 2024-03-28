@@ -9,10 +9,25 @@
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
                 "StringLike": {
-                  "token.actions.githubusercontent.com:sub": "repo:zMynxx/iac-terragrunt-template:ref:refs/heads/main"
+                    "token.actions.githubusercontent.com:sub": "repo:develeap/iac-terragrunt-template:ref:refs/heads/main"
                 },
                 "StringEquals": {
-                  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::1234567890:root"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalArn": "arn:aws:iam::123456789012:user/lior.dux"
+                },
+                "IpAddress": {
+                    "aws:SourceIp": "10.2.19.97/32"
                 }
             }
         }
