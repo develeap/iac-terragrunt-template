@@ -24,11 +24,6 @@ modules_dir="modules"
 # * @return - None
 # */
 create_example_markdown() {
-	if [[ -z $1 ]]; then
-		echo "Module name not provided."
-		return 1
-	fi
-	
 	module_name="$1"
 	module_path="${modules_dir}"/"${module_name}"
 	example_file="${module_path}"/EXAMPLE.md
