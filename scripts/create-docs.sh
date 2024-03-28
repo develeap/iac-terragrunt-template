@@ -30,19 +30,19 @@ create_example_markdown() {
 
 	# init repo if not initiate already (required for docs)
 	cd "${module_path}"
-	terraform init
-	cd -
+	terraform init >/dev/null 2>&1
+	cd - >/dev/null
 	# Generate example configuration using terraform-docs
 	example_config=$(terraform-docs tfvars hcl "${module_path}")
 
 	# Create the example.md file with the desired structure
-	cat <<-EOF >"${example_file}"
-	module "${module_name}" {
-	  $(echo 'source = "../../path/to/this/module"' | awk '{print "  " $0}')
+	cat <<MODULE >"${example_file}"
+module "${module_name}" {
+  $(echo 'source = "../../path/to/this/module"' | awk '{print "  " $0}')
 
-	  $(echo "$example_config" | awk '{print "  " $0}')
-	}
-	EOF
+  $(echo "$example_config" | awk '{print "  " $0}')
+}
+MODULE
 }
 
 # /**
@@ -113,12 +113,12 @@ create_docs_markdown() {
 
 	# Run terraform graph and generate a GRAPH.svg
 	graph_file="./GRAPH.svg"
-	cd ${module_path}
+	cd "${module_path}"
 	terraform graph -draw-cycles | dot -Tsvg > "${graph_file}"
 
 	# deletes init leftovers
 	rm -rf .terraform && rm .terraform.lock.hcl
-	cd -
+	cd - >/dev/null
 
 	echo '<img src="./GRAPH.svg" alt="" />' >>"${readme_file}"
 }
@@ -131,6 +131,7 @@ main() {
   if [[ -z "${module_name}" ]]; then
     echo "Module name not provided."
     read -r -p "Enter the module name: " module_name
+    echo "Generating documentation, please wait..."
   fi
 	create_example_markdown "${module_name}"
 	create_docs_markdown "${module_name}"
