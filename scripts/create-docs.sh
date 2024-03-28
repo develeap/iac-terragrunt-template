@@ -28,15 +28,10 @@ create_example_markdown() {
 		echo "Module name not provided."
 		return 1
 	fi
-
+	
 	module_name="$1"
 	module_path="${modules_dir}"/"${module_name}"
 	example_file="${module_path}"/EXAMPLE.md
-
-	if [[ -f "${example_file}" ]]; then
-		echo "EXAMPLE.md file already exists in the module directory."
-		return 1
-	fi
 
 	# init repo if not initiate already (required for docs)
 	cd "${module_path}"
@@ -70,11 +65,6 @@ create_docs_markdown() {
 	module_path="${modules_dir}/${module_name}"
 	readme_file="${module_path}"/README.md
 
-	if [ -f "${readme_file}" ]; then
-		echo "README.md file already exists in the module directory."
-		return 1
-	fi
-
 	# Set header
 	echo "# Module \"${module_name}\"" >>"${readme_file}"
 	echo "---" >>"${readme_file}"
@@ -99,7 +89,7 @@ create_docs_markdown() {
 	echo "Paste the following snipped into your code to use the module." >>"${readme_file}"
 
 	# Paste in the example in code block
-	example_file="$${module_path}/EXAMPLE.md"
+	example_file="${module_path}/EXAMPLE.md"
 	echo '```terraform' >>"${readme_file}"
 	cat "${example_file}" >>"${readme_file}"
 	echo '```' >>"${readme_file}"
@@ -134,7 +124,7 @@ create_docs_markdown() {
 	# Run terraform graph and generate a GRAPH.svg
 	graph_file="./GRAPH.svg"
 	cd ${module_path}
-	terraform graph -draw-cycles | dot -Tsvg >>"${graph_file}"
+	terraform graph -draw-cycles | dot -Tsvg > "${graph_file}"
 
 	# deletes init leftovers
 	rm -rf .terraform && rm .terraform.lock.hcl

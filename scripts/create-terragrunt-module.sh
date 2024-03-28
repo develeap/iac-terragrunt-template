@@ -20,9 +20,20 @@ create_terragrunt_file() {
 		return 1
 	fi
 
-	modules_dir="modules"
-	module_name=$1
-	module_path=
+  module_name=$1
+  module_path=$(fuzzy_select)
+  if [[ -z $module_path ]]; then
+    echo "Module path not provided."
+    return 2
+  fi
+  full_path="${module_path}/${module_name}"
+  echo "Creating Terragrunt module at: ${full_path}"
+  if mkdir -p "${full_path}" && create_template_file "${full_path}"; then
+    echo "Directory created and template file created successfully."
+  else
+    echo "Failed to create directory or template file."
+    return 3
+  fi
 
 }
 
@@ -33,86 +44,62 @@ create_terragrunt_file() {
 # * @return - None
 create_template_file() {
 	if [[ -z $1 ]]; then
-		echo "Module path not provided."
+		echo "Path not provided."
 		return 1
 	fi
 
-	module_path=$1
-	module_name=$2
-	cat <<-HCL > "${module_path}"/"${module_name}"/terragrunt.hcl
-  # ---------------------------------------------------------------------------------------------------------------------
-  # TERRAGRUNT CONFIGURATION
-  # This is the configuration for Terragrunt, a thin wrapper for Terraform and OpenTofu that helps keep your code DRY and
-  # maintainable: https://github.com/gruntwork-io/terragrunt
-  # ---------------------------------------------------------------------------------------------------------------------
+	path=$1
+	cp scripts/terragrunt-template.hcl "${path}"/terragrunt.hcl
+}
 
-	terraform {
-	  #source = "tfr:///aws-ia/eks-blueprints-addon/aws?version=1.1.0"
-	  #source = "git::git@github.com:acme/infrastructure-modules.git//networking/vpc?ref=v0.0.1"
-	  source = "\${get_path_to_repo_root()}//modules/"
+# /**
+# * @brief This function uses fzf to select the path of the module.
+# * @param - None
+# * @return - Selected path
+# */
+fuzzy_select() {
+    root_dir="infrastructure-live"
 
-    # Before apply or plan, run "echo Foo".
-    before_hook "before_hook" {
-      commands = ["apply", "plan"]
-      execute = [
-        "echo",
-        "==========================================================================   ",
-        "Running Terrafom",
-        "   =========================================================================="
-        ]
-    }
-    
-    # After apply or plan, run "echo Foo"
-    after_hook "after_hook" {
-      commands = ["apply", "plan"]
-      run_on_error = true
-      execute = [
-        "echo",
-        "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ",
-        "Finished Running Terrafom",
-        "   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-      ]
-    }
-    
-    # After an error occurs during apply or plan, run "echo Error Hook executed". This hook is configured so that it will run
-    # after any error, with the ".*" expression.
-    error_hook "error_hook_1" {
-      commands  = ["apply", "plan"]
-      on_errors = [".*"]
-      execute = [
-        "echo",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  ",
-        "Finished Running Terrafom",
-        "   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-      ]
-    }
+    # Get list of accounts
+    accounts=$(find "$root_dir" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzf --prompt="Select Account: ")
+    if [[ -z "$accounts" ]]; then
+        echo "No account selected. Exiting."
+        exit 1
+    fi
 
-    # For any terraform commands that use locking, make sure to configure a lock timeout of 20 minutes.
-    extra_arguments "retry_lock" {
-      commands  = get_terraform_commands_that_need_locking()
-      arguments = ["-lock-timeout=20m"]
-    }
-  }
+    # Get list of environments
+    environments=$(find "$root_dir/$accounts" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzf --prompt="Select Environment: ")
+    if [[ -z "$environments" ]]; then
+        echo "No environment selected. Exiting."
+        exit 1
+    fi
 
-  # Include the root 'terragrunt.hcl' configuration. The root configuration contains settings that are common across all
-  # components and environments, such as how to configure remote state.
-  include "provider" {
-    path = find_in_parent_folders("provider.hcl")
-    # We want to reference the variables from the included config in this configuration, so we expose it.
-    expose = true
-  }
+    # Get list of sub-environments
+    sub_environments=$(find "$root_dir/$accounts/$environments" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzf --prompt="Select Sub Environment: ")
+    if [[ -z "$environments" ]]; then
+        echo "No environment selected. Exiting."
+        exit 1
+    fi
 
-  dependencies {
-    paths = []
-  }
 
-  dependency "public_hosted_zone" {
-    config_path = ""
-    mock_outputs = {}
-  }
+    # Get list of regions
+    regions=$(find "$root_dir/$accounts/$environments/$sub_environments" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzf --prompt="Select Region: ")
+    if [[ -z "$regions" ]]; then
+        echo "No region selected. Exiting."
+        exit 1
+    fi
 
-  inputs = {}
-	HCL
+    # Get list of infrastructure components
+    components=$(find "$root_dir/$accounts/$environments/$sub_environments/$regions" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzf --prompt="Select Component: ")
+    if [[ -z "$components" ]]; then
+        echo "No component selected. Exiting."
+        exit 1
+    fi
+
+    # Construct full path
+    selected_path="$root_dir/$accounts/$environments/$sub_environments/$regions/$components"
+    # return "${selected_path}"
+    echo "${selected_path}"
 }
 
 ###########
