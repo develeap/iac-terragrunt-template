@@ -99,8 +99,6 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  #contents = get_env("GITHUB_REF", "NULL") != "NULL" ? file(format("%s//scripts/provider-a.hcl", get_repo_root())) : file(format("%s//scripts/provider-b.hcl", get_repo_root()))
-  #contents = get_env("GITHUB_REF", "NULL") != "NULL" ? read_terragrunt_config(format("%s//scripts/provider-a.hcl", get_repo_root())) : read_terragrunt_config(format("%s//scripts/provider-b.hcl", get_repo_root()))
   contents = get_env("GITHUB_REF", "NULL") == "NULL" ? "${local.provider_a}" : "${local.provider_b}"
 }
 
@@ -116,7 +114,10 @@ remote_state {
     key     = "${path_relative_to_include()}/terraform.tfstate"
     profile = "${local.profile}"
     region  = "${local.region}"
+
+    # Uncomment the following if your using a custom endpoint
     #endpoint       = "https://s3.eu-central-1.amazonaws.com"
+
     encrypt        = true
     kms_key_id     = "${local.kms_key_id}"
     dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
