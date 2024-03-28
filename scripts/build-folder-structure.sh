@@ -74,6 +74,8 @@ locals {
   profile = "my-profile" # Set this to your AWS profile
 }
 HCL
+		#		cat ./scripts/provider.hcl > infrastructure-live/"${account}"/provider.hcl
+		ls -la ./scripts/provider.hcl
 		cp ./scripts/provider.hcl infrastructure-live/"${account}"/provider.hcl
 
 		for environment in "${environments[@]}"; do
