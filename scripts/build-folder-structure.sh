@@ -13,8 +13,8 @@
 # Globals #
 ###########
 accounts=('006262944085')
-regions=('il-central-1')
-environments=('prod')
+regions=('il-central-1' 'us-east-2')
+environments=('prod' 'staging' 'dev')
 subjects=('storage' 'network' 'secrets' 'compute' 'databases')
 
 #############

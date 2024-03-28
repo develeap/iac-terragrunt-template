@@ -15,11 +15,6 @@
 # * @return - None
 # */
 create_terragrunt_file() {
-	if [[ -z $1 ]]; then
-		echo "Module name not provided."
-		return 1
-	fi
-
   module_name=$1
   module_path=$(fuzzy_select)
   if [[ -z $module_path ]]; then
@@ -106,7 +101,12 @@ fuzzy_select() {
 #  Main   #
 ###########
 main() {
-	create_terragrunt_file "$1"
+  module_name=$1
+  if [[ -z "${module_name}" ]]; then
+    echo "Module name not provided."
+    read -r -p "Enter the module name: " module_name 
+  fi
+	create_terragrunt_file "${module_name}"
 }
 
 main "$1"
