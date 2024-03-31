@@ -124,7 +124,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
 
-  config = merge(get_env("GITHUB_ACTIONS", "false") == "true" ? tomap({}) : "${local.remote_state}",
+  config = merge(get_env("GITHUB_ACTIONS", "false") == "true" ? {} : "${local.remote_state}",
   {
     bucket  = "${local.env}.${local.account_id}-terraform-remote-state.s3"
     key     = "${path_relative_to_include()}/terraform.tfstate"
