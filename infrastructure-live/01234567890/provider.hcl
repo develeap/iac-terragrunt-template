@@ -50,7 +50,7 @@ locals {
     local.env_tags,
     local.compliance_tags
   ))
-  provider_a = <<-PROVIDER_A
+  provider_local = <<-PROVIDER_LOCAL
   provider "aws" {
     region  = "${local.region}"
     profile = "${local.profile}"
@@ -69,8 +69,8 @@ locals {
       tags = ${local.tags_all}
     }
   }
-  PROVIDER_A
-  provider_b = <<-PROVIDER_B
+  PROVIDER_LOCAL
+  provider_ci = <<-PROVIDER_CI
   provider "aws" {
     region  = "${local.region}"
 
@@ -96,15 +96,29 @@ locals {
       tags = ${local.tags_all}
     }
   }
-  PROVIDER_B
-  #external_id  = "terraform-${local.env}"
-  remote_state = {
-    profile = "${local.profile}"
-    assume_role = tomap({
-      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role",
+  PROVIDER_CI
+  dynamic_config = merge(
+    {
+      bucket  = "${local.env}.${local.account_id}-terraform-remote-state.s3"
+      key     = "${path_relative_to_include()}/terraform.tfstate"
+      region  = "${local.region}"
+
+      # Uncomment the following if your using a custom endpoint
+      #endpoint       = "https://s3.eu-central-1.amazonaws.com"
+
+      encrypt        = true
+      kms_key_id     = "${local.kms_key_id}"
+      dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
+
+      s3_bucket_tags      = jsondecode("${local.tags_all}")
+      dynamodb_table_tags = jsondecode("${local.tags_all}")
+    },
+    get_env("GITHUB_ACTIONS", "false") == "true" ? {} : {
+      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
       session_name = "Local-Session"
-    })
-  }
+      profile = "${local.profile}"
+    }
+  )
 }
 
 generate "provider" {
@@ -114,7 +128,7 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  contents = get_env("GITHUB_ACTIONS", "false") == "true" ? "${local.provider_b}" : "${local.provider_a}"
+  contents = get_env("GITHUB_ACTIONS", "false") == "true" ? "${local.provider_ci}" : "${local.provider_local}"
 }
 
 remote_state {
@@ -124,23 +138,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
 
-  config = merge(get_env("GITHUB_ACTIONS", "false") == "true" ? {} : "${local.remote_state}",
-  {
-    bucket  = "${local.env}.${local.account_id}-terraform-remote-state.s3"
-    key     = "${path_relative_to_include()}/terraform.tfstate"
-    region  = "${local.region}"
-
-    # Uncomment the following if your using a custom endpoint
-    #endpoint       = "https://s3.eu-central-1.amazonaws.com"
-
-    encrypt        = true
-    kms_key_id     = "${local.kms_key_id}"
-    dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
-
-    s3_bucket_tags      = jsondecode("${local.tags_all}")
-    dynamodb_table_tags = jsondecode("${local.tags_all}")
-  }
-  )
+  config = local.dynamic_config
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
