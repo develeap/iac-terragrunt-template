@@ -63,7 +63,7 @@ include "provider" {
 # Include the common inputs for the module. This configuration contains settings that are common across all components
 # and environments, such as the instance type and AMI to use.
 locals {
-  commons = read_terragrunt_config(find_in_parent_folders(format("%s/%s.hcl", dirname(get_terragrunt_dir()))))
+  commons = read_terragrunt_config(find_in_parent_folders(format("%s/%s.hcl", dirname(get_terragrunt_dir()), dirname(get_terragrunt_dir()))))
 }
 
 inputs = merge(
