@@ -118,7 +118,7 @@ infrastructure-live
 │               │   └── network.hcl
 │               ├── region.hcl
 │               ├── secret
-               │   └── secret.hcl
+|               │   └── secret.hcl
 │               └── storage
 │                   └── storage.hcl
 └── infrastructure.hcl
