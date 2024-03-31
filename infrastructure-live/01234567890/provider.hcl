@@ -81,6 +81,13 @@ locals {
       duration           = "0h20m0s"
       web_identity_token = get_env("AWS_SESSION_TOKEN", "")
     }
+  # # assume_role {
+  #     role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+  #     session_name = "Pipeline-Session"
+  #     duration     = "0h20m0s"
+  #   }
+
+
 
     # Only these AWS Account IDs may be operated on by this template
     allowed_account_ids = ["${local.account_id}"]
@@ -99,7 +106,7 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  contents = get_env("GITHUB_REF", "NULL") != "NULL" ? "${local.provider_a}" : "${local.provider_b}"
+  contents = get_env("GITHUB_REF", "NULL") == "NULL" ? "${local.provider_b}" : "${local.provider_a}"
 }
 
 remote_state {
