@@ -1,3 +1,4 @@
+---
 name: Digger Pull Request Workflow
 on:
   workflow_dispatch:
@@ -25,37 +26,37 @@ jobs:
     runs-on: ubuntu-latest
     # Permissions for OIDC with AWS
     permissions:
-      contents: write # required to merge PRs
-      id-token: write # required for workload-identity-federation
-      pull-requests: write # required to post PR comments
-      statuses: write # required to validate combined PR status
+      contents: write  # required to merge PRs
+      id-token: write  # required for workload-identity-federation
+      pull-requests: write  # required to post PR comments
+      statuses: write  # required to validate combined PR status
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: echo env
-        run: env | sort
-        shell: bash
+      # - name: checkout
+      #   uses: actions/checkout@v4
       - name: digger run
         uses: diggerhq/digger@v0.4.13
         with:
-          #########
+          ##########
           # Setup  #
-          #########
+          ##########
           setup-terragrunt: true
           terragrunt-version: 0.54.12
           # terraform-version: v1.5.5
           # opentofu-version: v1.6.0-alpha3
           setup-checkov: true
           checkov-version: 2.3.360
-          ################
+          #################
           # AWS Settings  #
-          ################
+          #################
           setup-aws: true
-          aws-role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME }}
+          aws-role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME
+            }}
           aws-region: ${{ secrets.AWS_REGION }}
-          ###################
+          ####################
           # Digger Settings  #
-          ###################
+          ####################
+          configure-checkout: true
+          telemetry: false
           disable-locking: true
           digger-filename: digger.yaml
           digger-hostname: https://cloud.digger.dev
@@ -72,15 +73,15 @@ jobs:
           # DIGGER_ACCESS_KEY_ID: ${{ secrets.DIGGER_ACCESS_KEY_ID }}
           # DIGGER_SECRET_ACCESS_KEY: ${{ secrets.DIGGER_SECRET_ACCESS_KEY }}
 
-##########
-# DEBUG  #
-##########
-# In order to debug the generation of the provider and backend files, uncomment the following lines
-# - name: check provider.tf
-#   if: always()
-#   run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/provider.tf
-#   shell: bash
-# - name: check backend.tf
-#   if: always()
-#   run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/backend.tf
-#   shell: bash
+          ##########
+          # DEBUG  #
+          ##########
+          # In order to debug the generation of the provider and backend files, uncomment the following lines
+          # - name: check provider.tf
+          #   if: always()
+          #   run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/provider.tf
+          #   shell: bash
+          # - name: check backend.tf
+          #   if: always()
+          #   run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/backend.tf
+          #   shell: bash
