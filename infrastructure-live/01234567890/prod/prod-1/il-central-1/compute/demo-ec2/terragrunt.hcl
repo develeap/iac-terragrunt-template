@@ -60,4 +60,16 @@ include "provider" {
   expose = true
 }
 
-inputs = {}
+# Include the common inputs for the module. This configuration contains settings that are common across all components
+# and environments, such as the instance type and AMI to use.
+locals {
+  commons = read_terragrunt_config(find_in_parent_folders(format("%s.hcl", basename(get_terragrunt_dir()))))
+}
+
+inputs = merge(
+  locals.commons.locals,
+  {
+    # Override the instance type and AMI for this specific component and environment.
+    instance_name = "${include.provider.locals.env}.demo.ec2"
+  }
+) 
