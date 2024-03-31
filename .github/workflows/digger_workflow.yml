@@ -83,3 +83,7 @@ jobs:
         if: always()
         run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/provider.tf
         shell: bash
+      - name: check backend.tf
+        if: always()
+        run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/backend.tf
+        shell: bash

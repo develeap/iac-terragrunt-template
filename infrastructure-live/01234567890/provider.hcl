@@ -97,6 +97,14 @@ locals {
     }
   }
   PROVIDER_B
+  remote_state = {
+    profile = "${local.profile}",
+    assume_role = {
+      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+      #external_id  = "terraform-${local.env}"
+      session_name = "Local-Session"
+    }
+  }
 }
 
 generate "provider" {
@@ -106,7 +114,7 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  contents = get_env("GITHUB_ACTIONS") == "true" ? "${local.provider_b}" : "${local.provider_a}"
+  contents = get_env("GITHUB_ACTIONS", "false") == "true" ? "${local.provider_b}" : "${local.provider_a}"
 }
 
 remote_state {
@@ -116,10 +124,10 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
 
-  config = {
+  config = merge(get_env("GITHUB_ACTIONS", "false") == "true" ? tomap({}) : "${local.remote_state}",
+  {
     bucket  = "${local.env}.${local.account_id}-terraform-remote-state.s3"
     key     = "${path_relative_to_include()}/terraform.tfstate"
-    profile = "${local.profile}"
     region  = "${local.region}"
 
     # Uncomment the following if your using a custom endpoint
@@ -128,14 +136,11 @@ remote_state {
     encrypt        = true
     kms_key_id     = "${local.kms_key_id}"
     dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
-    assume_role = {
-      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      #external_id  = "terraform-${local.env}"
-      session_name = "Local-Session"
-    }
+
     s3_bucket_tags      = jsondecode("${local.tags_all}")
     dynamodb_table_tags = jsondecode("${local.tags_all}")
   }
+  )
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
