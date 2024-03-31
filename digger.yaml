@@ -4,7 +4,6 @@
 # projects:
 # - name: production
 #   dir: prod
-
 # Or use the terragrunt_parsing workflow to generate the projects.
 generate_projects:
   terragrunt_parsing:
@@ -21,14 +20,17 @@ workflows:
         - init
         - run: checkov -d . --quiet --framework terraform --download-external-modules true
         - plan
+        - run: infracost breakdown --path=. | tee -a $DIGGER_OUT
+        - run: git checkout $DEFAULT_BRANCH && infracost breakdown --path . --format=json --out-file=$RUNNER_TEMP/infracost-base-${PROJECT_NAME}.json && git fetch origin $PR_BRANCH && git checkout $PR_BRANCH
+        - run: infracost diff --path=. --compare-to=$RUNNER_TEMP/infracost-base-${PROJECT_NAME}.json | tee -a $DIGGER_OUT
 
-  # To be run on only by invoking the /digger commands in a PR
-  # comments-only:
-  #   apply:
-  #     steps:
-  #       - hclfmt
-  #       - apply
-  #
-  #   destroy:
-  #     steps:
-  #       - destroy
+# To be run on only by invoking the /digger commands in a PR
+# comments-only:
+#   apply:
+#     steps:
+#       - hclfmt
+#       - apply
+#
+#   destroy:
+#     steps:
+#       - destroy
