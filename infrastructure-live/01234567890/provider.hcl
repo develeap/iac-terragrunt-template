@@ -112,11 +112,10 @@ locals {
       dynamodb_table_tags = jsondecode("${local.tags_all}")
 
       role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      session_name = "Local-Session"
     },
-    get_env("GITHUB_ACTIONS", "false") == "true" ? {} : {
+    get_env("GITHUB_ACTIONS", "false") == "true" ? {session_name = "Pipeline-Session"} : {
       profile = "${local.profile}"
-      session_name = "Pipeline-Session"
+      session_name = "Local-Session"
     }
   )
 }
