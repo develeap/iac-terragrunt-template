@@ -1,4 +1,6 @@
-[![github](https://cloud.githubusercontent.com/124557045/318264693-3038f95b-a817-4596-b956-57cd2164084b.png)[1]
+[<img src="https://github.com/develeap/iac-terragrunt-template/raw/master/docs/media/icon.png" width="500" height="500">][1]
+
+[1]: https://www.develeap.com/
 
 # iac-terragrunt-template
 
