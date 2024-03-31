@@ -65,7 +65,7 @@ jobs:
           disable-locking: true
           digger-filename: digger.yaml
           digger-hostname: 'https://cloud.digger.dev'
-          digger-organisation: 'digger'
+          digger-organisation: 'develeap'
           digger-token: ${{ secrets.DIGGER_TOKEN }}
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
