@@ -79,7 +79,7 @@ jobs:
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # DIGGER_ACCESS_KEY_ID: ${{ secrets.DIGGER_ACCESS_KEY_ID }}
           # DIGGER_SECRET_ACCESS_KEY: ${{ secrets.DIGGER_SECRET_ACCESS_KEY }}
-
       - name: check provider.tf
+        if: always()
         run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/provider.tf
         shell: bash
