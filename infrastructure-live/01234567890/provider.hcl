@@ -97,13 +97,13 @@ locals {
     }
   }
   PROVIDER_B
+  #external_id  = "terraform-${local.env}"
   remote_state = {
     profile = "${local.profile}"
-    assume_role = {
-      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      #external_id  = "terraform-${local.env}"
+    assume_role = tomap({
+      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role",
       session_name = "Local-Session"
-    }
+    })
   }
 }
 
