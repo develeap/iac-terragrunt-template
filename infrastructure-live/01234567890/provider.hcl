@@ -106,7 +106,7 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  contents = get_env("GITHUB_REF", "NULL") == "NULL" ? "${local.provider_b}" : "${local.provider_a}"
+  contents = get_env("GITHUB_ACTIONS") == "true" ? "${local.provider_b}" : "${local.provider_a}"
 }
 
 remote_state {
