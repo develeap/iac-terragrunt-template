@@ -6,9 +6,9 @@
 
 [1]: https://www.develeap.com/
 
-# iac-terragrunt-template
+## Introduction
 
-Repository to use as a template for future terragrunt (IaC tool) projects.
+This repository is a template to be used for future terragrunt projects. It contains a basic structure for terragrunt projects and some basic modules to be used as examples.
 
 ## Table of Contents
 
@@ -25,10 +25,6 @@ Repository to use as a template for future terragrunt (IaC tool) projects.
   - [Include Deep Dive](docs/include-deepdive.md)
 - [Contributing](#contributing)
 - [License](#license)
-
-## Introduction
-
-This repository is a template to be used for future terragrunt projects. It contains a basic structure for terragrunt projects and some basic modules to be used as examples.
 
 ## Prerequisites
 
@@ -128,7 +124,8 @@ infrastructure-live
 
 ## Inheritance
 
-The folder structure is designed to inherit configurations from the parent folders. For example, the `compute_commons.hcl` file in the `dev-1` folder inherits configurations from the `compute_commons.hcl` file in the `dev` folder, which in turn inherits configurations from the `environment_commons.hcl` file in the `dev` folder, and so on.
+The folder structure is designed to allow for inheritance of configurations. The `account.hcl` file is used to define the account specific configurations, while the `env.hcl` file is used to define the environment specific configurations. The `region.hcl` file is used to define the region specific configurations. And so forth.
+A single include block will be used to include all the configurations from the parent folders.
 
 ## Documentation
 
