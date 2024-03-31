@@ -98,7 +98,7 @@ locals {
   }
   PROVIDER_B
   remote_state = {
-    profile = "${local.profile}",
+    profile = "${local.profile}"
     assume_role = {
       role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
       #external_id  = "terraform-${local.env}"
