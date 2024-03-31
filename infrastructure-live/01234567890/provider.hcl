@@ -85,7 +85,7 @@ locals {
        role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
        session_name = "Pipeline-Session"
        duration     = "0h20m0s"
-     }
+    }
 
 
 
