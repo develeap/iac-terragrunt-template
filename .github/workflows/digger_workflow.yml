@@ -1,0 +1,86 @@
+name: Digger Pull Request Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      id:
+        description: run identifier
+        required: false
+      job:
+        required: true
+        description: job name
+      comment_id:
+        required: true
+        description: comment id
+  # pull_request:
+  #   branches: [main, master]
+  #   types: [closed, opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+    if: contains(github.event.comment.body, 'digger')
+# Set the width of the terminal for better formatting
+env:
+  COLUMNS: 120
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Permissions for OIDC with AWS
+    permissions:
+      contents: write # required to merge PRs
+      id-token: write # required for workload-identity-federation
+      pull-requests: write # required to post PR comments
+      statuses: write # required to validate combined PR status
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: echo env
+        run: env | sort
+        shell: bash
+      - name: digger run
+        uses: diggerhq/digger@v0.4.13
+        with:
+          #########
+          # Setup  #
+          #########
+          setup-terragrunt: true
+          terragrunt-version: 0.54.12
+          # terraform-version: v1.5.5
+          # opentofu-version: v1.6.0-alpha3
+          setup-checkov: true
+          checkov-version: 2.3.360
+          ################
+          # AWS Settings  #
+          ################
+          setup-aws: true
+          aws-role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          ###################
+          # Digger Settings  #
+          ###################
+          disable-locking: true
+          digger-filename: digger.yaml
+          digger-hostname: https://cloud.digger.dev
+          digger-organisation: develeap
+          digger-token: ${{ secrets.DIGGER_TOKEN }}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ##### To use different accounts for digger locks and arget infrastructure
+          # 1st pair used to provisions the infrastructure
+          # 2nd pair used for locking
+          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # DIGGER_ACCESS_KEY_ID: ${{ secrets.DIGGER_ACCESS_KEY_ID }}
+          # DIGGER_SECRET_ACCESS_KEY: ${{ secrets.DIGGER_SECRET_ACCESS_KEY }}
+
+##########
+# DEBUG  #
+##########
+# In order to debug the generation of the provider and backend files, uncomment the following lines
+# - name: check provider.tf
+#   if: always()
+#   run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/provider.tf
+#   shell: bash
+# - name: check backend.tf
+#   if: always()
+#   run: cat infrastructure-live/01234567890/prod/prod-1/il-central-1/compute/demo-ec2/.terragrunt-cache/*/*/backend.tf
+#   shell: bash

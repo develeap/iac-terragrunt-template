@@ -1,0 +1,34 @@
+# This is the configuration file for Digger. It is used to define the projects and workflows that Digger will use to generate the projects.
+# Manually declare the projects and workflows that Digger will use to generate the projects.
+#
+# projects:
+# - name: production
+#   dir: prod
+
+# Or use the terragrunt_parsing workflow to generate the projects.
+generate_projects:
+  terragrunt_parsing:
+    parallel: true
+    createProjectName: true
+    createWorkspace: true
+    defaultWorkflow: default
+workflows:
+  # To be run on every pull request, by default
+  default:
+    plan:
+      steps:
+        - hclfmt
+        - init
+        - run: checkov -d . --quiet --framework terraform --download-external-modules true
+        - plan
+
+  # To be run on only by invoking the /digger commands in a PR
+  # comments-only:
+  #   apply:
+  #     steps:
+  #       - hclfmt
+  #       - apply
+  #
+  #   destroy:
+  #     steps:
+  #       - destroy

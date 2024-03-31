@@ -50,7 +50,7 @@ locals {
     local.env_tags,
     local.compliance_tags
   ))
-  provider_a = <<-PROVIDER_A
+  provider_local = <<-PROVIDER_LOCAL
   provider "aws" {
     region  = "${local.region}"
     profile = "${local.profile}"
@@ -69,17 +69,22 @@ locals {
       tags = ${local.tags_all}
     }
   }
-  PROVIDER_A
-  provider_b = <<-PROVIDER_B
+  PROVIDER_LOCAL
+  provider_ci = <<-PROVIDER_CI
   provider "aws" {
     region  = "${local.region}"
 
     # Web Identity Role Federation only used in CI/CD
-    assume_role_with_web_identity {
-      role_arn           = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      session_name       = "Pipeline-Session"
-      duration           = "0h20m0s"
-      web_identity_token = get_env("AWS_SESSION_TOKEN", "")
+  # assume_role_with_web_identity {
+  #    role_arn           = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+  #    session_name       = "Pipeline-Session"
+  #    duration           = "0h20m0s"
+  #    web_identity_token = get_env("AWS_SESSION_TOKEN", "")
+  #  }
+    assume_role {
+       role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+       session_name = "Pipeline-Session"
+       duration     = "0h20m0s"
     }
 
     # Only these AWS Account IDs may be operated on by this template
@@ -89,7 +94,30 @@ locals {
       tags = ${local.tags_all}
     }
   }
-  PROVIDER_B
+  PROVIDER_CI
+  dynamic_config = merge(
+    {
+      bucket  = "${local.env}.${local.account_id}-terraform-remote-state.s3"
+      key     = "${path_relative_to_include()}/terraform.tfstate"
+      region  = "${local.region}"
+
+      # Uncomment the following if your using a custom endpoint
+      #endpoint       = "https://s3.eu-central-1.amazonaws.com"
+
+      encrypt        = true
+      kms_key_id     = "${local.kms_key_id}"
+      dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
+
+      s3_bucket_tags      = jsondecode("${local.tags_all}")
+      dynamodb_table_tags = jsondecode("${local.tags_all}")
+
+      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
+    },
+    get_env("GITHUB_ACTIONS", "false") == "true" ? {session_name = "Pipeline-Session"} : {
+      profile = "${local.profile}"
+      session_name = "Local-Session"
+    }
+  )
 }
 
 generate "provider" {
@@ -99,7 +127,7 @@ generate "provider" {
   # Provider will be generated dynamically according to where it is running
   # If running locally, it will use the assume_role block 
   # If running in CI/CD, it will use the assume_role_with_web_identity block
-  contents = get_env("GITHUB_REF", "NULL") == "NULL" ? "${local.provider_a}" : "${local.provider_b}"
+  contents = get_env("GITHUB_ACTIONS", "false") == "true" ? "${local.provider_ci}" : "${local.provider_local}"
 }
 
 remote_state {
@@ -109,26 +137,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
 
-  config = {
-    bucket  = "${local.env}.${local.account_id}-terraform-remote-state.s3"
-    key     = "${path_relative_to_include()}/terraform.tfstate"
-    profile = "${local.profile}"
-    region  = "${local.region}"
-
-    # Uncomment the following if your using a custom endpoint
-    #endpoint       = "https://s3.eu-central-1.amazonaws.com"
-
-    encrypt        = true
-    kms_key_id     = "${local.kms_key_id}"
-    dynamodb_table = "${local.env}.terraform_remote-state-lock.dynamodb"
-    assume_role = {
-      role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      #external_id  = "terraform-${local.env}"
-      session_name = "Local-Session"
-    }
-    s3_bucket_tags      = jsondecode("${local.tags_all}")
-    dynamodb_table_tags = jsondecode("${local.tags_all}")
-  }
+  config = local.dynamic_config
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

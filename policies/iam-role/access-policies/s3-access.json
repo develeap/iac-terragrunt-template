@@ -1,0 +1,38 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowCreateAndListS3ActionsOnSpecifiedTerragruntBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketVersioning",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLogging",
+                "s3:CreateBucket",
+                "s3:PutBucketPublicAccessBlock",
+                "s3:PutBucketTagging",
+                "s3:PutBucketPolicy",
+                "s3:PutBucketVersioning",
+                "s3:PutEncryptionConfiguration",
+                "s3:PutBucketAcl",
+                "s3:PutBucketLogging",
+                "s3:GetEncryptionConfiguration",
+                "s3:GetBucketPolicy",
+                "s3:GetBucketPublicAccessBlock",
+                "s3:PutLifecycleConfiguration",
+                "s3:PutBucketOwnershipControls"
+            ],
+            "Resource": "arn:aws:s3:::prod.0123456790-terrafrom-remote-state.s3"
+        },
+        {
+            "Sid": "AllowGetAndPutS3ActionsOnSpecifiedTerragruntBucketPath",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::prod.0123456790-terrafrom-remote-state.s3/*"
+        }
+    ]
+}
