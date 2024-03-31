@@ -112,10 +112,11 @@ locals {
 
       s3_bucket_tags      = jsondecode("${local.tags_all}")
       dynamodb_table_tags = jsondecode("${local.tags_all}")
-    },
-    get_env("GITHUB_ACTIONS", "false") == "true" ? {} : {
+
       role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
       session_name = "Local-Session"
+    },
+    get_env("GITHUB_ACTIONS", "false") == "true" ? {} : {
       profile = "${local.profile}"
     }
   )
