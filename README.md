@@ -1,6 +1,7 @@
 <p align="center" width="100%">
-    <!-- <img width="33%" src="https://i.stack.imgur.com/RJj4x.png"> -->
-    [<img src="https://github.com/develeap/iac-terragrunt-template/raw/feature/digger/docs/media/icon.png" width="500" height="500">][1]
+    <a href="https://www.develeap.com/">
+    <img src="https://github.com/develeap/iac-terragrunt-template/raw/feature/digger/docs/media/icon.png" alt="Develeap - we can take you there!" width="500" height="500">
+    </a>
 </p>
 
 [1]: https://www.develeap.com/
