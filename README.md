@@ -1,4 +1,4 @@
-[![github](https://private-user-images.githubusercontent.com/124557045/318264693-3038f95b-a817-4596-b956-57cd2164084b.png)[1]
+[![github](https://cloud.githubusercontent.com/124557045/318264693-3038f95b-a817-4596-b956-57cd2164084b.png)[1]
 
 # iac-terragrunt-template
 
