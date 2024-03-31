@@ -12,11 +12,11 @@ on:
       comment_id:
         required: true
         description: comment id
-  # pull_request:
-  #   branches:
-  #     - main
-  #     - master
-  #   types: [ closed, opened, synchronize, reopened ]
+  pull_request:
+    branches:
+      - main
+      - master
+    types: [ closed, opened, synchronize, reopened ]
   issue_comment:
     types: [created]
     if: contains(github.event.comment.body, 'digger')
