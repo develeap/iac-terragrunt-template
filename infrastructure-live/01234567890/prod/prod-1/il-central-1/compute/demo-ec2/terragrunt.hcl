@@ -67,7 +67,7 @@ locals {
 }
 
 inputs = merge(
-  locals.commons.locals,
+  local.commons.locals,
   {
     # Override the instance type and AMI for this specific component and environment.
     instance_name = "${include.provider.locals.env}.demo.ec2"
