@@ -87,8 +87,6 @@ locals {
        duration     = "0h20m0s"
     }
 
-
-
     # Only these AWS Account IDs may be operated on by this template
     allowed_account_ids = ["${local.account_id}"]
 
@@ -118,6 +116,7 @@ locals {
     },
     get_env("GITHUB_ACTIONS", "false") == "true" ? {} : {
       profile = "${local.profile}"
+      session_name = "Pipeline-Session"
     }
   )
 }
