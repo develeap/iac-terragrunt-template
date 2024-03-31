@@ -1,4 +1,4 @@
-[<img src="https://github.com/develeap/iac-terragrunt-template/raw/feature/digger/docs/media/icon.png" width="500" height="500">][1]
+[<img align="center" src="https://github.com/develeap/iac-terragrunt-template/raw/feature/digger/docs/media/icon.png" width="500" height="500">][1]
 
 [1]: https://www.develeap.com/
 
