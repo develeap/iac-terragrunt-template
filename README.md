@@ -71,92 +71,59 @@ just build-folder-structure
 
 ```bash
 infrastructure-live
-├── 82281136
+├── 01234567890
 │   ├── account.hcl
 │   ├── dev
 │   │   ├── dev-1
-│   │   │   ├── us-east-1
-│   │   │   │   ├── compute
-│   │   │   │   │   └── compute
-│   │   │   │   ├── databases
-│   │   │   │   │   └── databases
-│   │   │   │   ├── network
-│   │   │   │   │   └── network
-│   │   │   │   ├── region.hcl
-│   │   │   │   ├── secrets
-│   │   │   │   │   └── secrets
-│   │   │   │   └── storage
-│   │   │   │       └── storage
-│   │   │   └── us-west-1
+│   │   │   └── il-central-1
 │   │   │       ├── compute
-│   │   │       │   └── compute
-│   │   │       ├── databases
-│   │   │       │   └── databases
+│   │   │       │   └── compute.hcl
+│   │   │       ├── database
+│   │   │       │   └── database.hcl
 │   │   │       ├── network
-│   │   │       │   └── network
+│   │   │       │   └── network.hcl
 │   │   │       ├── region.hcl
-│   │   │       ├── secrets
-│   │   │       │   └── secrets
+│   │   │       ├── secret
+│   │   │       │   └── secret.hcl
 │   │   │       └── storage
-│   │   │           └── storage
+│   │   │           └── storage.hcl
 │   │   └── env.hcl
 │   ├── prod
 │   │   ├── env.hcl
 │   │   └── prod-1
-│   │       ├── us-east-1
-│   │       │   ├── compute
-│   │       │   │   └── compute
-│   │       │   ├── databases
-│   │       │   │   └── databases
-│   │       │   ├── network
-│   │       │   │   └── network
-│   │       │   ├── region.hcl
-│   │       │   ├── secrets
-│   │       │   │   └── secrets
-│   │       │   └── storage
-│   │       │       └── storage
-│   │       └── us-west-1
+│   │       └── il-central-1
 │   │           ├── compute
-│   │           │   └── compute
-│   │           ├── databases
-│   │           │   └── databases
+│   │           │   ├── compute.hcl
+│   │           │   └── demo-ec2
+│   │           │       └── terragrunt.hcl
+│   │           ├── database
+│   │           │   └── database.hcl
 │   │           ├── network
-│   │           │   └── network
+│   │           │   └── network.hcl
 │   │           ├── region.hcl
-│   │           ├── secrets
-│   │           │   └── secrets
+│   │           ├── secret
+│   │           │   └── secret.hcl
 │   │           └── storage
-│   │               └── storage
+│   │               └── storage.hcl
+│   ├── provider.hcl
 │   └── stage
 │       ├── env.hcl
 │       └── stage-1
-│           ├── us-east-1
-│           │   ├── compute
-│           │   │   └── compute
-│           │   ├── databases
-│           │   │   └── databases
-│           │   ├── network
-│           │   │   └── network
-│           │   ├── region.hcl
-│           │   ├── secrets
-│           │   │   └── secrets
-│           │   └── storage
-│           │       └── storage
-│           └── us-west-1
+│           └── il-central-1
 │               ├── compute
-│               │   └── compute
-│               ├── databases
-│               │   └── databases
+│               │   └── compute.hcl
+│               ├── database
+│               │   └── database.hcl
 │               ├── network
-│               │   └── network
+│               │   └── network.hcl
 │               ├── region.hcl
-│               ├── secrets
-│               │   └── secrets
+│               ├── secret
+               │   └── secret.hcl
 │               └── storage
-│                   └── storage
+│                   └── storage.hcl
 └── infrastructure.hcl
 
-44 directories, 41 files
+27 directories, 25 files
 ```
 
 ## Inheritance
