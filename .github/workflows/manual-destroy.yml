@@ -51,7 +51,6 @@ jobs:
           # Digger Settings  #
           ####################
           configure-checkout: true
-          telemetry: false
           disable-locking: true
           digger-filename: digger.yaml
           digger-hostname: https://cloud.digger.dev
