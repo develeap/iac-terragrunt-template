@@ -8,29 +8,37 @@ env:
 jobs:
   detect-drift:
     runs-on: ubuntu-latest
+    # Permissions for OIDC with AWS
+    permissions:
+      contents: write  # required to merge PRs
+      id-token: write  # required for workload-identity-federation
+      pull-requests: write  # required to post PR comments
+      statuses: write  # required to validate combined PR status
     steps:
       - name: digger drift detection
         uses: diggerhq/digger@v0.4.13
         with:
           mode: drift-detection
-          #########
+          ##########
           # Setup  #
-          #########
+          ##########
           setup-terragrunt: true
           terragrunt-version: 0.54.12
           # terraform-version: v1.5.5
           # opentofu-version: v1.6.0-alpha3
           setup-checkov: true
           checkov-version: 2.3.360
-          ################
+          #################
           # AWS Settings  #
-          ################
+          #################
           setup-aws: true
           aws-role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
-          ###################
+          ####################
           # Digger Settings  #
-          ###################
+          ####################
+          configure-checkout: true
+          telemetry: false
           disable-locking: true
           digger-filename: digger.yaml
           digger-hostname: https://cloud.digger.dev
