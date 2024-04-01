@@ -68,6 +68,10 @@ locals {
     default_tags {
       tags = ${local.tags_all}
     }
+
+    ignore_tags {
+      keys = ["LastModifiedTime", "Birthdate", "Expiration"]
+    }
   }
   PROVIDER_LOCAL
   provider_ci = <<-PROVIDER_CI
@@ -92,6 +96,10 @@ locals {
 
     default_tags {
       tags = ${local.tags_all}
+    }
+
+    ignore_tags {
+      keys = ["LastModifiedTime", "Birthdate", "Expiration"]
     }
   }
   PROVIDER_CI
