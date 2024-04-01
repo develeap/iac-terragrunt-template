@@ -26,7 +26,7 @@ modules_dir="modules"
 create_example_markdown() {
 	module_name="$1"
 	module_path="${modules_dir}"/"${module_name}"
-	example_file="${module_path}"/EXAMPLE.md
+	example_file="${module_path}"/EXAMPLE.tfignore
 
 	# init repo if not initiate already (required for docs)
 	cd "${module_path}"
@@ -36,13 +36,12 @@ create_example_markdown() {
 	example_config=$(terraform-docs tfvars hcl "${module_path}")
 
 	# Create the example.md file with the desired structure
-	cat <<MODULE >"${example_file}"
-module "${module_name}" {
-  $(echo 'source = "../../path/to/this/module"' | awk '{print "  " $0}')
-
-  $(echo "$example_config" | awk '{print "  " $0}')
-}
-MODULE
+	cat <<-MODULE >"${example_file}"
+	module "${module_name}" {
+	    source = "../../path/to/this/module"
+	$(echo "$example_config" | awk '{print "    " $0}')
+	}
+	MODULE
 }
 
 # /**
@@ -79,7 +78,7 @@ create_docs_markdown() {
 	echo "Paste the following snipped into your code to use the module." >>"${readme_file}"
 
 	# Paste in the example in code block
-	example_file="${module_path}/EXAMPLE.md"
+	example_file="${module_path}/EXAMPLE.tfignore"
 	echo '```terraform' >>"${readme_file}"
 	cat "${example_file}" >>"${readme_file}"
 	echo '```' >>"${readme_file}"
@@ -114,10 +113,9 @@ create_docs_markdown() {
 	# Run terraform graph and generate a GRAPH.svg
 	graph_file="./GRAPH.svg"
 	cd "${module_path}"
-	terraform graph -draw-cycles | dot -Tsvg > "${graph_file}"
+	terraform graph -draw-cycles | dot -Tsvg >"${graph_file}"
 
 	# deletes init leftovers
-	rm -rf .terraform && rm .terraform.lock.hcl
 	cd - >/dev/null
 
 	echo '<img src="./GRAPH.svg" alt="" />' >>"${readme_file}"
@@ -128,13 +126,13 @@ create_docs_markdown() {
 ########
 main() {
 	module_name=$1
-  if [[ -z "${module_name}" ]]; then
-    echo "Module name not provided."
-    read -r -p "Enter the module name: " module_name
-    echo "Generating documentation, please wait..."
-  fi
+	if [[ -z "${module_name}" ]]; then
+		echo "Module name not provided."
+		read -r -p "Enter the module name: " module_name
+		echo "Generating documentation, please wait..."
+	fi
 	create_example_markdown "${module_name}"
 	create_docs_markdown "${module_name}"
 }
 
-mi 1
+main "$1"
