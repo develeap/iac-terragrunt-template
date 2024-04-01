@@ -11,6 +11,7 @@ generate_projects:
     createProjectName: true
     createWorkspace: true
     defaultWorkflow: default
+telemetry: false
 workflows:
   # To be run on every pull request, by default
   default:
