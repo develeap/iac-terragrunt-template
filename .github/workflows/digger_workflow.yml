@@ -31,8 +31,12 @@ jobs:
       pull-requests: write  # required to post PR comments
       statuses: write  # required to validate combined PR status
     steps:
-      # - name: checkout
-      #   uses: actions/checkout@v4
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        # See https://github.com/infracost/actions/tree/master/setup for other inputs
+        # If you can't use this action, use Docker image infracost/infracost:ci-0.10
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
       - name: digger run
         uses: diggerhq/digger@v0.4.13
         with:
