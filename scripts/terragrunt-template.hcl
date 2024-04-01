@@ -60,4 +60,14 @@ include "provider" {
   expose = true
 }
 
-inputs = {}
+# and environments, such as the instance type and AMI to use.
+locals {
+  commons = read_terragrunt_config(find_in_parent_folders(format("%s.hcl", basename(dirname(get_terragrunt_dir())))))
+}
+
+inputs = merge(
+  local.commons.locals,
+  {
+    # Override some common inputs for this specific instance, or add new ones
+  }
+) 
