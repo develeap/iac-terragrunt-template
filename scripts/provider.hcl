@@ -22,7 +22,7 @@ locals {
   # TAGS
   tg_tags = tomap({ Terragrunt = "True" })
   computed_tags = tomap({
-    LastModifiedTime = "${timestamp()}", // uncomment only after delivery
+    LastModifiedTime = "${timestamp()}",
     #LastModifiedBy   = "${get_aws_caller_identity_arn()}"
   })
   account_tags = tomap({
@@ -57,7 +57,6 @@ locals {
 
     assume_role {
       role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-      #policy_arns   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
       session_name = "Local-Session"
       duration     = "0h20m0s"
     }
@@ -78,13 +77,6 @@ locals {
   provider "aws" {
     region  = "${local.region}"
 
-    # Web Identity Role Federation only used in CI/CD
-  # assume_role_with_web_identity {
-  #    role_arn           = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
-  #    session_name       = "Pipeline-Session"
-  #    duration           = "0h20m0s"
-  #    web_identity_token = get_env("AWS_SESSION_TOKEN", "")
-  #  }
     assume_role {
        role_arn = "arn:aws:iam::${local.account_id}:role/${local.env}.terraform_bot.role"
        session_name = "Pipeline-Session"
