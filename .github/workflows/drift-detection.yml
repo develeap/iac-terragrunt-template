@@ -10,11 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     # Permissions for OIDC with AWS
     permissions:
-      contents: write  # required to merge PRs
-      id-token: write  # required for workload-identity-federation
-      pull-requests: write  # required to post PR comments
-      statuses: write  # required to validate combined PR status
+      contents: write # required to merge PRs
+      id-token: write # required for workload-identity-federation
+      pull-requests: write # required to post PR comments
+      statuses: write # required to validate combined PR status
     steps:
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        # See https://github.com/infracost/actions/tree/master/setup for other inputs
+        # If you can't use this action, use Docker image infracost/infracost:ci-0.10
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
       - name: digger drift detection
         uses: diggerhq/digger@v0.4.13
         with:
