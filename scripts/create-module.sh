@@ -23,42 +23,42 @@ create_module() {
 	# Create a versions template for this module
 	cat <<-TF >"${module_path}"/0-versions.tf
 	terraform {
-	  required_version = ">= $(terraform --version | head -1 | awk '{print $2}' | sed 's/v//' | sed 's/+.*//')"
+		required_version = ">= $(terraform --version | head -1 | awk '{print $2}' | sed 's/v//' | sed 's/+.*//')"
 	}
 	TF
 
 	# Create a main.tf file for this module
 	cat <<-TF >"${module_path}/1-main.tf"
 	resource "null_resource" "example" {
-	  # Paramaters
+		# Paramaters
 	}
 	TF
 
 	# Create a outputs.tf file for this module
 	cat <<-TF >"${module_path}/2-outputs.tf"
 	output "example" {
-	  value = null_resource.example.*
+		value = null_resource.example.*
 	}
 	TF
 
 	# Create a locals.tf file for this module
 	cat <<-TF >"${module_path}/3-locals.tf"
 	locals {
-	  # Variables
+		# Variables
 	}
 	TF
 
 	# Create a data_sources.tf file for this module
 	cat <<-TF >"${module_path}/4-data_sources.tf"
 	data "example" {
-	  # Paramaters
+		# Paramaters
 	}
 	TF
 
 	# Create a variables.tf file for this module
 	cat <<-TF >"${module_path}/5-variables.tf"
 	variable "example" {
-	  type = string
+		type = string
 	}
 	TF
 }
@@ -67,11 +67,11 @@ create_module() {
 #  Main   #
 ###########
 main() {
-  module_name=$1
-  if [[ -z "${module_name}" ]]; then
-    echo "Module name not provided."
-    read -r -p "Enter the module name: " module_name
-  fi
+	module_name=$1
+	if [[ -z "${module_name}" ]]; then
+		echo "Module name not provided."
+		read -r -p "Enter the module name: " module_name
+	fi
 	create_module "${module_name}"
 }
 
